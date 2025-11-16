@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-# export OPENAI_API_KEY=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
+# export OPENAI_API_KEY=
+
+
+# my name is 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
 
 set -euo pipefail
 
