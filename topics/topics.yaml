@@ -1,0 +1,2461 @@
+# ============================================================ 
+# TEMPLATE FOR GENERATING TECHNICAL PRIMERS / INTRO GUIDES
+# ============================================================
+# Fields explained:
+#   depth:
+#       - "low"    → high-level overview
+#       - "medium" → architectural, conceptual, operational (recommended default)
+#       - "high"   → deep technical, detailed protocols, internals
+#
+#   audience:
+#       - "engineers"
+#       - "utility_engineers"
+#       - "security_engineers"
+#       - "software_engineers"
+#       - "network_engineers"
+#       - domain-specific audiences are allowed
+#
+#   doc_type:
+#       - "technical primer"
+#       - "protocol explainer"
+#       - "standards overview"
+#       - "cryptographic architecture"
+#       - "introduction"
+#       - "engineering overview"
+#
+#   length:
+#       - integer = approximate word count (e.g. 2000 = ~2000 words)
+#
+#   output:
+#       - filename ONLY (no directory prefixes); directories are auto-generated:
+#         <output_dir>/<category>/<sub_category>/<output>
+#
+#   summary:
+#       - short one- or two-sentence description of document intent
+#
+#   category / sub_category:
+#       - used to group topics logically
+#       - sub_category only used when multiple topics share a meaningful grouping
+# ============================================================
+
+template: |
+  You are generating a Markdown document.  
+  The final output MUST begin with the YAML front-matter shown below.  
+  Output the YAML front-matter exactly as rendered by this template.  
+  Do NOT modify field names.  
+  Do NOT explain the front-matter.  
+  After the front-matter, write the full document content.
+
+  --- 
+  title: "{{topic}}"
+  summary: "{{summary}}"
+  category: "{{category}}"
+  sub_category: "{{ sub_category | default("") }}"
+  tags:
+    {% for tag in tags %}
+    - "{{tag}}"
+    {% endfor %}
+  related_topics:
+    {% for r in related %}
+    - "{{r}}"
+    {% endfor %}
+  ---
+
+  Begin your Markdown document **immediately after** the YAML front-matter above.
+
+  Produce a formal, textbook-style {{doc_type}} that introduces {{audience}} to the topic "{{topic}}".
+
+  Depth: {{depth}}
+  Audience: {{audience}}
+  Document Type: {{doc_type}}
+  Topic: {{topic}}
+  Summary guidance: "{{summary}}"
+
+  Target Length: {{length}} words (approximate), or whatever length is required to sufficiently convey the topic with clarity and completeness.
+
+  Use the summary for context but do not repeat it verbatim unless appropriate.
+
+  Provide a clear, structured explanation, but choose the structure appropriate to the topic rather than following a fixed outline.
+
+  The document should:
+
+    - Define the topic clearly and place it in the correct technical context.
+    - Explain core concepts, key components, and relevant architecture at the specified depth.
+    - Describe how the technology works in practice, including typical workflows, constraints, assumptions, and common variations.
+    - Reference relevant standards, RFCs, protocols, or specifications where appropriate, without including a further-reading section.
+
+    - Whenever the explanation would benefit from a diagram that can be represented in Mermaid, PlantUML, or similar with descriptive explanatory names
+      (such as block diagrams, system overviews, flowcharts, sequence/call-flow diagrams, state diagrams, or simple architecture diagrams),
+      generate an actual Mermaid diagram with a descriptive explanatory name.
+
+      All Mermaid diagrams must be syntactically valid and conform to official Mermaid grammar.
+      Only use supported arrow and link types.
+      When labelling edges, use standard Mermaid syntax such as A --> B, A -->|Label| B, A -.-> B, or A -. Label .-> B.
+      Do not invent custom arrow styles or combine dotted lines with labels in unsupported ways.
+      Keep edge labels simple and avoid quotes, colons, or special punctuation that may break parsing.
+      Wrap node titles in square brackets where appropriate (e.g., NodeA[Client Device]).
+      Do not output diagrams containing unsupported characters or invalid link operators.
+      Do not describe diagrams in prose when they can be expressed in Mermaid.
+      Only omit a diagram if the concept genuinely cannot be expressed as Mermaid.
+
+    - Suggest other helpful visuals when appropriate.  
+      Use a **Note** admonition for “diagram to be added later” placeholders.
+
+    - Use GitHub Alerts (admonitions) to highlight important notes, cautions, tips, or warnings.
+
+    - Highlight practical engineering considerations such as integration points, performance implications, implementation challenges, common pitfalls, and typical engineering decisions.
+
+    - Remain formal, technical, and objective throughout.
+
+    - Avoid marketing language, opinion, or unnecessary narrative.
+
+    - Keep explanations accurate, structured, coherent, and suitable for engineers approaching the topic for the first time.
+
+
+topics:
+
+  # ============================================================
+  # IOT PROTOCOLS & CONNECTIVITY
+  # ============================================================
+  - topic: MQTT
+    summary: "Lightweight publish-subscribe messaging protocol for constrained IoT devices and cloud backends."
+    category: iot
+    sub_category: protocols
+    tags: [mqtt, iot, pubsub, messaging, protocols]
+    related: ["LwM2M (Lightweight M2M)", "NB-IoT (Narrowband IoT)", "IoT-specific PKI Architectures", "TLS 1.3"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: mqtt_primer.md
+
+  - topic: LwM2M (Lightweight M2M)
+    summary: "OMA LwM2M device management and telemetry protocol for constrained IoT devices."
+    category: iot
+    sub_category: protocols
+    tags: [lwm2m, coap, iot, device_management]
+    related: ["Constrained Application Protocol (CoAP)", "MQTT", "FOTA (Firmware Over-The-Air)", "NB-IoT (Narrowband IoT)"]
+    depth: high
+    audience: iot_engineers
+    doc_type: "protocol explainer"
+    length: 2800
+    output: lwm2m_primer.md
+
+  - topic: Constrained Application Protocol (CoAP)
+    summary: "REST-like application protocol for constrained devices over UDP."
+    category: iot
+    sub_category: protocols
+    tags: [coap, iot, udp, constrained_devices]
+    related: ["LwM2M (Lightweight M2M)", "MQTT", "DTLS (Datagram TLS)"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: coap_primer.md
+
+  - topic: FOTA (Firmware Over-The-Air)
+    summary: "Mechanisms and workflows for reliable firmware updates in IoT deployments."
+    category: iot
+    sub_category: lifecycle
+    tags: [fota, updates, iot, device_lifecycle]
+    related: ["LwM2M (Lightweight M2M)", "Secure Boot Chains", "IoT-specific PKI Architectures"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "engineering overview"
+    length: 2300
+    output: fota_overview.md
+
+  - topic: NB-IoT (Narrowband IoT)
+    summary: "3GPP LPWAN technology optimised for low-power IoT devices and long-range coverage."
+    category: iot
+    sub_category: connectivity
+    tags: [nb-iot, cellular, lpwan, iot]
+    related: ["LwM2M (Lightweight M2M)", "MQTT", "Constrained Application Protocol (CoAP)"]
+    depth: medium
+    audience: network_engineers
+    doc_type: "technical primer"
+    length: 2300
+    output: nbiot_primer.md
+
+  - topic: IoT-specific PKI Architectures
+    summary: "PKI hierarchy and identity lifecycle design for large-scale IoT ecosystems."
+    category: iot
+    sub_category: security
+    tags: [pki, iot, certificates, onboarding, device_identity]
+    related: ["X.509 Certificates", "Secure Boot Chains", "CMP and EST"]
+    depth: high
+    audience: security_engineers
+    doc_type: "cryptographic architecture"
+    length: 2800
+    output: iot_pki_architectures.md
+
+  # ============================================================
+  # SMART ENERGY & SMART METERING
+  # ============================================================
+  - topic: ZigBee
+    summary: "Low-power mesh networking standard for IoT and home automation."
+    category: smart_energy
+    sub_category: networking
+    tags: [zigbee, mesh, home_automation]
+    related: ["ZigBee Smart Energy", "SMETS2 and GBCS", "DLMS/COSEM"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2500
+    output: zigbee_primer.md
+
+  - topic: ZigBee Smart Energy
+    summary: "Smart Energy Profile (SEP) for smart metering, demand-response, and energy management."
+    category: smart_energy
+    sub_category: applications
+    tags: [zigbee, smart_energy, sep, metering]
+    related: ["ZigBee", "DLMS/COSEM", "SMETS2 and GBCS"]
+    depth: high
+    audience: utility_engineers
+    doc_type: "standards overview"
+    length: 2500
+    output: zigbee_smart_energy_overview.md
+
+  - topic: DLMS/COSEM
+    summary: "Leading international standard for metering data modelling and secure communication."
+    category: smart_energy
+    sub_category: metering_standards
+    tags: [dlms, cosem, metering, standards]
+    related: ["ZigBee Smart Energy", "SMETS2 and GBCS"]
+    depth: high
+    audience: utility_engineers
+    doc_type: "standards overview"
+    length: 3000
+    output: dlms_cosem_overview.md
+
+  - topic: SMETS2 and GBCS
+    summary: "UK smart metering specifications and secure companion standards for electricity and gas metering."
+    category: smart_energy
+    sub_category: metering_standards
+    tags: [smets2, gbcs, smart_metering, dcc]
+    related: ["DLMS/COSEM", "ZigBee Smart Energy"]
+    depth: high
+    audience: smart_metering_engineers
+    doc_type: "protocol explainer"
+    length: 3000
+    output: smets2_gbcs_primer.md
+
+  # ============================================================
+  # API & DATA FORMATS
+  # ============================================================
+  - topic: JSON and YAML
+    summary: "Comparison of JSON and YAML as structured serialisation formats for APIs, configuration, and integration."
+    category: api_data
+    sub_category: data_formats
+    tags: [json, yaml, config, data_formats]
+    related: ["Protocol Buffers (Protobuf)", "OpenAPI", "AsyncAPI"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: json_yaml_primer.md
+
+  - topic: Protocol Buffers (Protobuf)
+    summary: "Binary schema-based serialisation system for efficient message exchange."
+    category: api_data
+    sub_category: data_formats
+    tags: [protobuf, serialization, rpc]
+    related: ["JSON and YAML", "gRPC", "AsyncAPI"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: protobuf_primer.md
+
+  - topic: AsyncAPI
+    summary: "Specification for describing asynchronous, event-driven APIs."
+    category: api_data
+    sub_category: api_specs
+    tags: [asyncapi, event_driven, apis]
+    related: ["MQTT", "Apache Kafka", "OpenAPI"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: asyncapi_overview.md
+
+  - topic: OpenAPI
+    summary: "Industry standard for describing RESTful HTTP APIs."
+    category: api_data
+    sub_category: api_specs
+    tags: [openapi, rest, apis, http]
+    related: ["REST", "JSON and YAML"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: openapi_overview.md
+
+  - topic: REST
+    summary: "Architectural style for resource-based communication over HTTP."
+    category: api_data
+    sub_category: api_styles
+    tags: [rest, http, apis]
+    related: ["OpenAPI", "JSON and YAML", "OAuth 2.0"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: rest_primer.md
+
+  # ============================================================
+  # SECURITY / CRYPTOGRAPHY
+  # ============================================================
+
+  ## PKI & Certificate Ecosystem
+  - topic: Public Key Infrastructure (PKI)
+    summary: "Trust architecture enabling secure identity, authentication, and encryption."
+    category: security_crypto
+    sub_category: pki
+    tags: [pki, certificates, trust, identity]
+    related: ["X.509 Certificates", "OCSP and CRLs", "CMP and EST"]
+    depth: high
+    audience: security_engineers
+    doc_type: "cryptographic architecture"
+    length: 2500
+    output: pki_overview.md
+
+  - topic: X.509 Certificates
+    summary: "Digital certificate format defining public-key identity binding."
+    category: security_crypto
+    sub_category: pki
+    tags: [x509, certificates, pki]
+    related: ["Public Key Infrastructure (PKI)", "Certificate Signing Requests (CSRs)", "OCSP and CRLs"]
+    depth: high
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2500
+    output: x509_primer.md
+
+  - topic: OCSP and CRLs
+    summary: "Certificate status checking mechanisms used in PKI ecosystems."
+    category: security_crypto
+    sub_category: pki
+    tags: [ocsp, crl, pki]
+    related: ["X.509 Certificates", "Public Key Infrastructure (PKI)"]
+    depth: high
+    audience: security_engineers
+    doc_type: "protocol explainer"
+    length: 2200
+    output: ocsp_crl_overview.md
+
+  - topic: CMP and EST
+    summary: "Automated certificate enrolment protocols for secure device onboarding."
+    category: security_crypto
+    sub_category: pki
+    tags: [cmp, est, certificate_enrollment]
+    related: ["X.509 Certificates", "Public Key Infrastructure (PKI)", "IoT-specific PKI Architectures"]
+    depth: high
+    audience: security_engineers
+    doc_type: "protocol explainer"
+    length: 2400
+    output: cmp_est_primer.md
+
+  - topic: Certificate Signing Requests (CSRs)
+    summary: "Structure, signing process, and lifecycle of CSRs in PKI systems."
+    category: security_crypto
+    sub_category: pki
+    tags: [csr, pki, certificates]
+    related: ["X.509 Certificates", "Public Key Infrastructure (PKI)"]
+    depth: medium
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: csr_primer.md
+
+
+  ## Protocol Security
+  - topic: TLS 1.3
+    summary: "Modern, secure transport-layer protocol with simplified handshake and forward secrecy."
+    category: security_crypto
+    sub_category: protocols
+    tags: [tls13, encryption, handshake]
+    related: ["DTLS (Datagram TLS)", "Public Key Infrastructure (PKI)", "X.509 Certificates"]
+    depth: high
+    audience: security_engineers
+    doc_type: "protocol explainer"
+    length: 2800
+    output: tls13_primer.md
+
+  - topic: DTLS (Datagram TLS)
+    summary: "TLS-equivalent security for UDP and unreliable transports."
+    category: security_crypto
+    sub_category: protocols
+    tags: [dtls, udp, security]
+    related: ["TLS 1.3", "Constrained Application Protocol (CoAP)", "LwM2M (Lightweight M2M)"]
+    depth: high
+    audience: security_engineers
+    doc_type: "protocol explainer"
+    length: 2500
+    output: dtls_primer.md
+
+  - topic: SSH Cryptography
+    summary: "Cryptographic foundations of SSH including key exchange and identity verification."
+    category: security_crypto
+    sub_category: protocols
+    tags: [ssh, key_exchange, identity]
+    related: ["TLS 1.3", "Public Key Infrastructure (PKI)"]
+    depth: high
+    audience: security_engineers
+    doc_type: "protocol explainer"
+    length: 2500
+    output: ssh_crypto_overview.md
+
+
+  ## Security Foundations
+  - topic: Symmetric Cryptography
+    summary: "Encryption using shared secret keys and common block modes."
+    category: security_crypto
+    sub_category: foundations
+    tags: [symmetric_crypto, encryption]
+    related: ["Advanced Encryption Standard (AES)", "Hash Functions"]
+    depth: medium
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: symmetric_crypto_primer.md
+
+  - topic: Asymmetric Cryptography
+    summary: "Public-key cryptography for signatures, key exchange, and identity."
+    category: security_crypto
+    sub_category: foundations
+    tags: [asymmetric_crypto, public_key]
+    related: ["RSA", "ECDSA", "Public Key Infrastructure (PKI)"]
+    depth: medium
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: asymmetric_crypto_primer.md
+
+  - topic: Hash Functions
+    summary: "Cryptographic hashing, collision resistance, and protocol usage."
+    category: security_crypto
+    sub_category: foundations
+    tags: [hash_functions]
+    related: ["SHA-256", "Message Authentication Codes"]
+    depth: medium
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: hash_functions_primer.md
+
+  - topic: Message Authentication Codes
+    summary: "Integrity and authenticity guarantees for communication using shared secret keys."
+    category: security_crypto
+    sub_category: foundations
+    tags: [mac, hmac, integrity]
+    related: ["Hash Functions", "Symmetric Cryptography"]
+    depth: medium
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: macs_primer.md
+
+  - topic: Key Derivation
+    summary: "KDFs for securely deriving independent keys from shared material."
+    category: security_crypto
+    sub_category: foundations
+    tags: [kdf, hkdf, key_material]
+    related: ["Random Number Generation", "TLS 1.3"]
+    depth: high
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: key_derivation_primer.md
+
+  - topic: Random Number Generation
+    summary: "Entropy, deterministic random bit generators, and secure random generation requirements."
+    category: security_crypto
+    sub_category: foundations
+    tags: [rng, entropy, drbg]
+    related: ["Key Derivation", "Symmetric Cryptography"]
+    depth: high
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2300
+    output: random_number_generation_primer.md
+
+  - topic: Lightweight Cryptography
+    summary: "Cryptography for constrained environments such as embedded IoT devices."
+    category: security_crypto
+    sub_category: foundations
+    tags: [lightweight_crypto, iot]
+    related: ["Symmetric Cryptography", "Post-quantum Cryptography"]
+    depth: high
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2500
+    output: lightweight_crypto_primer.md
+
+  - topic: Post-quantum Cryptography
+    summary: "Cryptographic algorithms designed to be secure against quantum adversaries."
+    category: security_crypto
+    sub_category: foundations
+    tags: [pqc, lattices, crypto]
+    related: ["RSA", "ECDSA"]
+    depth: high
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2600
+    output: post_quantum_crypto_primer.md
+
+  # ============================================================
+  # CRYPTOGRAPHIC ALGORITHMS
+  # ============================================================
+
+  - topic: RSA
+    summary: "Widely used asymmetric algorithm for encryption and digital signatures."
+    category: crypto_algorithms
+    sub_category: public_key
+    tags: [rsa, public_key, crypto]
+    related: ["Asymmetric Cryptography", "Public Key Infrastructure (PKI)"]
+    depth: medium
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: rsa_primer.md
+
+  - topic: ECDSA
+    summary: "Digital signature algorithm based on elliptic curves."
+    category: crypto_algorithms
+    sub_category: public_key
+    tags: [ecdsa, signatures, elliptic_curve]
+    related: ["RSA", "Asymmetric Cryptography"]
+    depth: high
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: ecdsa_primer.md
+
+  - topic: Advanced Encryption Standard (AES)
+    summary: "Standard block cipher used in symmetric encryption and authenticated modes."
+    category: crypto_algorithms
+    sub_category: symmetric
+    tags: [aes, symmetric, crypto]
+    related: ["Symmetric Cryptography"]
+    depth: high
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: aes_primer.md
+
+  - topic: SHA-256
+    summary: "Cryptographic hash function widely used in signatures and integrity systems."
+    category: crypto_algorithms
+    sub_category: hashing
+    tags: [sha256, hashing]
+    related: ["Hash Functions"]
+    depth: medium
+    audience: security_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: sha256_primer.md
+
+  # ============================================================
+  # ARCHITECTURE
+  # ============================================================
+
+  - topic: Microservice Architecture
+    summary: "Design principles, scalability considerations, and operational patterns for microservices."
+    category: architecture
+    sub_category: styles
+    tags: [microservices, architecture, distributed_systems]
+    related: ["REST", "OpenAPI", "Event-driven Architecture"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2500
+    output: microservice_architecture.md
+
+  - topic: Event-driven Architecture
+    summary: "Patterns and characteristics of event-based distributed systems."
+    category: architecture
+    sub_category: styles
+    tags: [eda, events, pubsub]
+    related: ["AsyncAPI", "MQTT"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2500
+    output: event_driven_architecture.md
+
+  - topic: Hexagonal Architecture
+    summary: "Ports-and-adapters style for isolating domain logic from external concerns."
+    category: architecture
+    sub_category: styles
+    tags: [hexagonal_architecture, ports_and_adapters]
+    related: ["Domain-Driven Design (DDD)", "Microservice Architecture"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2300
+    output: hexagonal_architecture.md
+
+  - topic: C4 Model for Software Architecture
+    summary: "Hierarchical diagrams for visualising software systems at multiple levels of abstraction."
+    category: architecture
+    sub_category: documentation
+    tags: [c4_model, diagrams, architecture]
+    related: ["Docs-as-Code", "arc42 Template"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: c4_model_primer.md
+
+  - topic: arc42 Template
+    summary: "Pragmatic architecture documentation template for software and systems."
+    category: architecture
+    sub_category: documentation
+    tags: [arc42, architecture_docs]
+    related: ["C4 Model for Software Architecture", "Docs-as-Code"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: arc42_overview.md
+
+  - topic: Architecture Decision Records (ADRs)
+    summary: "Lightweight records for capturing important architectural decisions and context."
+    category: architecture
+    sub_category: documentation
+    tags: [adr, decisions, architecture]
+    related: ["arc42 Template", "C4 Model for Software Architecture", "Docs-as-Code"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: adrs_primer.md
+
+  - topic: TOGAF Overview
+    summary: "High-level view of The Open Group Architecture Framework and its ADM cycle."
+    category: architecture
+    sub_category: frameworks
+    tags: [togaf, enterprise_architecture]
+    related: ["Architecture Decision Records (ADRs)"]
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1800
+    output: togaf_overview.md
+
+  # ============================================================
+  # DOCS & DIAGRAMS AS CODE
+  # ============================================================
+
+  - topic: Docs-as-Code
+    summary: "Authoring and maintaining documentation in version control using developer tools."
+    category: docs_as_code
+    sub_category: practices
+    tags: [docs, markdown, version_control]
+    related: ["Mermaid", "PlantUML", "Architecture Decision Records (ADRs)"]
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1500
+    output: docs_as_code_overview.md
+
+  - topic: Markdown for Technical Documentation
+    summary: "Using Markdown syntax and conventions for maintainable technical documentation."
+    category: docs_as_code
+    sub_category: tooling
+    tags: [markdown, docs]
+    related: ["Docs-as-Code", "MkDocs"]
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1500
+    output: markdown_technical_docs.md
+
+  - topic: MkDocs
+    summary: "Static site generator for technical documentation written in Markdown."
+    category: docs_as_code
+    sub_category: tooling
+    tags: [mkdocs, docs, static_sites]
+    related: ["Markdown for Technical Documentation", "Docs-as-Code"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: mkdocs_primer.md
+
+  - topic: Mermaid
+    summary: "Diagram-as-code syntax and patterns for block, sequence, flowcharts, and more."
+    category: docs_as_code
+    sub_category: diagrams
+    tags: [mermaid, diagrams, docs]
+    related: ["Docs-as-Code", "PlantUML", "C4 Model for Software Architecture"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: mermaid_primer.md
+
+  - topic: PlantUML
+    summary: "Text-based diagramming for sequence diagrams, class diagrams, and architecture views."
+    category: docs_as_code
+    sub_category: diagrams
+    tags: [plantuml, diagrams]
+    related: ["Mermaid", "Docs-as-Code"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: plantuml_primer.md
+
+  - topic: Engineering RFCs (Google-style design docs)
+    summary: "Internal engineering RFCs used to evaluate proposals, document decisions, and guide team alignment."
+    category: docs_as_code
+    sub_category: standards
+    tags: [engineering_rfc, design_docs, proposals]
+    related: ["Architecture Decision Records (ADRs)", "Docs-as-Code", "Code Review Practices"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: engineering_rfc_overview.md
+
+  # ============================================================
+  # SOFTWARE ENGINEERING PRINCIPLES & PATTERNS
+  # ============================================================
+
+  - topic: SOLID Principles
+    summary: "Object-oriented design principles that support flexible, maintainable codebases."
+    category: software_engineering
+    sub_category: principles
+    tags: [solid, design_principles]
+    related: ["Design Patterns (GoF)", "Clean Architecture"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: solid_principles_primer.md
+
+  - topic: DRY, KISS, and YAGNI
+    summary: "Core engineering heuristics that encourage simplicity and reduce unnecessary complexity."
+    category: software_engineering
+    sub_category: principles
+    tags: [dry, kiss, yagni, heuristics, simplicity]
+    related: ["SOLID Principles", "Clean Code Practices"]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1800
+    output: dry_kiss_yagni_primer.md
+
+  - topic: Design Patterns (GoF)
+    summary: "Classic object-oriented design patterns providing reusable solutions to common software problems."
+    category: software_engineering
+    sub_category: patterns
+    tags: [design_patterns, gof, oop]
+    related: ["SOLID Principles", "Hexagonal Architecture"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2600
+    output: design_patterns_gof_primer.md
+
+  - topic: Clean Architecture
+    summary: "Layered and boundary-driven architecture style that isolates business logic from frameworks."
+    category: software_engineering
+    sub_category: architecture_principles
+    tags: [clean_architecture, layering, boundaries]
+    related: ["Hexagonal Architecture", "Domain-Driven Design (DDD)"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2400
+    output: clean_architecture_overview.md
+
+  - topic: Domain-Driven Design (DDD)
+    summary: "Approach to modelling complex business domains via bounded contexts and ubiquitous language."
+    category: software_engineering
+    sub_category: architecture_principles
+    tags: [ddd, domain_modeling, bounded_contexts]
+    related: ["Hexagonal Architecture", "Event-driven Architecture"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2600
+    output: ddd_overview.md
+
+  - topic: Code Review Practices
+    summary: "Objectives, workflows, and structured best practices for high-quality peer code review."
+    category: software_engineering
+    sub_category: practices
+    tags: [code_review, quality, collaboration]
+    related: ["Docs-as-Code", "SOLID Principles"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: code_review_primer.md
+
+  - topic: Testing Strategies and Levels
+    summary: "Unit, integration, system, acceptance and regression testing strategies for robust delivery."
+    category: software_engineering
+    sub_category: practices
+    tags: [testing, unit_tests, integration_tests, quality]
+    related: ["Clean Architecture", "Continuous Integration Fundamentals"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2400
+    output: testing_strategies_overview.md
+
+  - topic: Continuous Integration Fundamentals
+    summary: "Principles and tooling for automating builds, tests, security checks, and code quality gates."
+    category: software_engineering
+    sub_category: practices
+    tags: [ci, automation, pipelines, quality_gates]
+    related: ["Testing Strategies and Levels", "Docs-as-Code"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: ci_fundamentals.md
+
+  # ============================================================
+  # SOFTWARE ENGINEERING ANTI-PATTERNS
+  # ============================================================
+
+  - topic: Big Ball of Mud
+    summary: "Unstructured, ad-hoc system with weak boundaries where architecture has eroded over time."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, architecture_decay, mud]
+    related: ["Lava Layer", "God Object", "Clean Architecture"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: big_ball_of_mud_primer.md
+
+  - topic: God Object
+    summary: "A class or module that centralises excessive responsibilities, violating separation of concerns."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, god_object, cohesion]
+    related: ["Big Ball of Mud", "SOLID Principles", "Design Patterns (GoF)"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1600
+    output: god_object_primer.md
+
+  - topic: Lava Layer
+    summary: "Deprecated or poor-quality code that accumulates and cannot be removed due to dependencies."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, technical_debt, layering]
+    related: ["Big Ball of Mud", "Legacy Code Patterns"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1700
+    output: lava_layer_primer.md
+
+  - topic: Golden Hammer
+    summary: "Overuse of a familiar technology, tool, or pattern regardless of suitability."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, overengineering, heuristics]
+    related: ["DRY, KISS, and YAGNI", "Design Patterns (GoF)"]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1500
+    output: golden_hammer_primer.md
+
+  - topic: Premature Optimisation
+    summary: "Optimising performance early without evidence, often harming readability and maintainability."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, optimisation, heuristics]
+    related: ["DRY, KISS, and YAGNI", "Clean Code Practices"]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1600
+    output: premature_optimisation_primer.md
+
+  - topic: Cargo Cult Programming
+    summary: "Blindly following patterns or copying code without understanding its purpose or applicability."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, copy_paste, heuristics]
+    related: ["Design Patterns (GoF)", "SOLID Principles"]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1500
+    output: cargo_cult_programming_primer.md
+
+  - topic: Shotgun Surgery
+    summary: "A change requires small edits across many files or modules, indicating poor modularity."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, cohesion, modularity]
+    related: ["God Object", "SOLID Principles"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: shotgun_surgery_primer.md
+
+  - topic: Spaghetti Code
+    summary: "Control flow becomes tangled and difficult to follow due to poor structure and excessive coupling."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, coupling, complexity]
+    related: ["Big Ball of Mud", "God Object"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: spaghetti_code_primer.md
+
+  # ============================================================
+  # SOFTWARE ENGINEERING – GOF PATTERN CATALOGUE
+  # ============================================================
+
+  # -----------------------------
+  # CREATIONAL PATTERNS
+  # -----------------------------
+
+  - topic: Factory Method Pattern
+    summary: "Defines an interface for object creation while allowing subclasses to decide which class to instantiate."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [factory_method, creational_pattern]
+    related: ["Abstract Factory Pattern", "Design Patterns (GoF)"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: factory_method_pattern_primer.md
+
+  - topic: Abstract Factory Pattern
+    summary: "Provides an interface for creating families of related objects without specifying their concrete classes."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [abstract_factory, creational_pattern]
+    related: ["Factory Method Pattern", "Builder Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: abstract_factory_pattern_primer.md
+
+  - topic: Builder Pattern
+    summary: "Separates the construction of complex objects from their representation, allowing stepwise assembly."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [builder, creational_pattern]
+    related: ["Abstract Factory Pattern", "Prototype Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1700
+    output: builder_pattern_primer.md
+
+  - topic: Prototype Pattern
+    summary: "Creates new objects by cloning existing instances, reducing the cost of object creation."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [prototype, creational_pattern]
+    related: ["Builder Pattern", "Factory Method Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1700
+    output: prototype_pattern_primer.md
+
+  - topic: Singleton Pattern
+    summary: "Ensures a class has a single instance and provides a global point of access to it."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [singleton, creational_pattern]
+    related: ["Factory Method Pattern", "Design Patterns (GoF)"]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1500
+    output: singleton_pattern_primer.md
+
+
+  # -----------------------------
+  # STRUCTURAL PATTERNS
+  # -----------------------------
+
+  - topic: Adapter Pattern
+    summary: "Converts the interface of a class into another interface clients expect."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [adapter, structural_pattern]
+    related: ["Facade Pattern", "Bridge Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: adapter_pattern_primer.md
+
+  - topic: Bridge Pattern
+    summary: "Decouples abstraction from implementation so the two can vary independently."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [bridge, structural_pattern]
+    related: ["Adapter Pattern", "Composite Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1900
+    output: bridge_pattern_primer.md
+
+  - topic: Composite Pattern
+    summary: "Composes objects into tree structures to represent part–whole hierarchies."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [composite, structural_pattern]
+    related: ["Iterator Pattern", "Decorator Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1900
+    output: composite_pattern_primer.md
+
+  - topic: Decorator Pattern
+    summary: "Adds responsibilities to objects dynamically without affecting other instances of the same class."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [decorator, structural_pattern]
+    related: ["Composite Pattern", "Strategy Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1900
+    output: decorator_pattern_primer.md
+
+  - topic: Facade Pattern
+    summary: "Provides a unified interface that simplifies interactions with a complex subsystem."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [facade, structural_pattern]
+    related: ["Adapter Pattern", "Mediator Pattern"]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1500
+    output: facade_pattern_primer.md
+
+  - topic: Flyweight Pattern
+    summary: "Minimises memory use by sharing common object state across many fine-grained objects."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [flyweight, structural_pattern]
+    related: ["Prototype Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: flyweight_pattern_primer.md
+
+  - topic: Proxy Pattern
+    summary: "Provides a surrogate or placeholder for another object to control access to it."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [proxy, structural_pattern]
+    related: ["Adapter Pattern", "Decorator Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: proxy_pattern_primer.md
+
+
+  # -----------------------------
+  # BEHAVIOURAL PATTERNS
+  # -----------------------------
+
+  - topic: Observer Pattern
+    summary: "Defines a one-to-many dependency where observers are notified of state changes."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [observer, behavioural_pattern, pubsub]
+    related: ["Mediator Pattern", "Event-driven Architecture"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1900
+    output: observer_pattern_primer.md
+
+  - topic: Strategy Pattern
+    summary: "Defines a family of algorithms and selects the appropriate one at runtime."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [strategy, behavioural_pattern]
+    related: ["State Pattern", "Command Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1900
+    output: strategy_pattern_primer.md
+
+  - topic: Command Pattern
+    summary: "Encapsulates a request as an object, allowing flexible queuing, logging, and undo operations."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [command, behavioural_pattern]
+    related: ["Invoker Pattern", "Strategy Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1900
+    output: command_pattern_primer.md
+
+  - topic: State Pattern
+    summary: "Allows an object to change its behaviour when its internal state changes."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [state, behavioural_pattern]
+    related: ["Strategy Pattern", "FSM Modelling"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1900
+    output: state_pattern_primer.md
+
+  - topic: Template Method Pattern
+    summary: "Defines the outline of an algorithm while allowing subclasses to refine specific steps."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [template_method, behavioural_pattern]
+    related: ["Strategy Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1700
+    output: template_method_pattern_primer.md
+
+  - topic: Iterator Pattern
+    summary: "Provides a standardised way to traverse elements of a collection without exposing its structure."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [iterator, behavioural_pattern]
+    related: ["Composite Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1700
+    output: iterator_pattern_primer.md
+
+  - topic: Mediator Pattern
+    summary: "Centralises communication between objects to avoid tight coupling."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [mediator, behavioural_pattern]
+    related: ["Observer Pattern", "Facade Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: mediator_pattern_primer.md
+
+  - topic: Memento Pattern
+    summary: "Captures and restores an object’s internal state without exposing its details."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [memento, behavioural_pattern]
+    related: ["Command Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1700
+    output: memento_pattern_primer.md
+
+  - topic: Chain of Responsibility Pattern
+    summary: "Passes requests along a chain of handlers until one processes it."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [chain_of_responsibility, behavioural_pattern]
+    related: ["Command Pattern"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: chain_of_responsibility_pattern_primer.md
+
+  - topic: Visitor Pattern
+    summary: "Separates an algorithm from the objects it operates on via external visitor classes."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [visitor, behavioural_pattern]
+    related: ["Composite Pattern", "Interpreter Pattern"]
+    depth: high
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: visitor_pattern_primer.md
+
+  - topic: Interpreter Pattern
+    summary: "Defines a grammatical representation and interpreter for a language or expression tree."
+    category: software_engineering
+    sub_category: design_patterns
+    tags: [interpreter, behavioural_pattern]
+    related: ["Visitor Pattern"]
+    depth: high
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2100
+    output: interpreter_pattern_primer.md
+
+  # ============================================================
+  # EMBEDDED SYSTEMS – PRINCIPLES & PATTERNS
+  # ============================================================
+
+  - topic: Finite State Machines (FSM)
+    summary: "Deterministic state-based modelling technique widely used in embedded control flow."
+    category: embedded_systems
+    sub_category: design_principles
+    tags: [fsm, state_machine, control_flow]
+    related: ["Event-driven Embedded Software", "Interrupt-driven Design"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: finite_state_machines_primer.md
+
+  - topic: RTOS Fundamentals
+    summary: "Real-time operating system concepts including scheduling, task management, and synchronisation."
+    category: embedded_systems
+    sub_category: rtos
+    tags: [rtos, scheduling, tasks, semaphores]
+    related: ["Bare-metal vs RTOS", "Task Scheduling Models", "POSIX Basics"]
+    depth: high
+    audience: embedded_engineers
+    doc_type: "engineering overview"
+    length: 2600
+    output: rtos_fundamentals_overview.md
+
+  - topic: POSIX Basics for Embedded Systems
+    summary: "Portable OS interface concepts commonly adopted in embedded Linux and RTOS environments."
+    category: embedded_systems
+    sub_category: operating_systems
+    tags: [posix, threads, ipc, portability]
+    related: ["RTOS Fundamentals", "Task Scheduling Models"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: posix_basics_primer.md
+
+  - topic: Layered Embedded Software Architecture
+    summary: "Typical separation of hardware abstraction, drivers, middleware, and application layers."
+    category: embedded_systems
+    sub_category: architecture
+    tags: [layered_architecture, hal, bsp, separation_of_concerns]
+    related: ["Client–Server Pattern (Embedded)", "Broker Pattern (Embedded)"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "engineering overview"
+    length: 2400
+    output: layered_embedded_architecture_overview.md
+
+  - topic: Client–Server Pattern (Embedded)
+    summary: "Structured separation between requesters and providers in sensor, control, and comms systems."
+    category: embedded_systems
+    sub_category: architecture
+    tags: [client_server, embedded_architecture]
+    related: ["Broker Pattern (Embedded)", "Event-driven Embedded Software"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: client_server_embedded_primer.md
+
+  - topic: Broker Pattern (Embedded)
+    summary: "Message-routing and service abstraction pattern used where components must remain loosely coupled."
+    category: embedded_systems
+    sub_category: architecture
+    tags: [broker_pattern, messaging, decoupling]
+    related: ["Client–Server Pattern (Embedded)", "Event-driven Embedded Software"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2100
+    output: broker_pattern_embedded_primer.md
+
+  - topic: Event-driven Embedded Software
+    summary: "Reactive programming model that triggers behaviour based on external or internal events."
+    category: embedded_systems
+    sub_category: design_principles
+    tags: [event_driven, reactive, callbacks]
+    related: ["Finite State Machines (FSM)", "Interrupt-driven Design"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: event_driven_embedded_primer.md
+
+  - topic: Interrupt-driven Design
+    summary: "Using hardware interrupts for deterministic response to time-critical conditions."
+    category: embedded_systems
+    sub_category: design_principles
+    tags: [interrupts, isr, latency]
+    related: ["Event-driven Embedded Software", "RTOS Fundamentals"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: interrupt_driven_design_primer.md
+
+  - topic: Bare-metal vs RTOS
+    summary: "Trade-offs between direct register-level control and pre-emptive multitasking environments."
+    category: embedded_systems
+    sub_category: design_principles
+    tags: [bare_metal, rtos, tradeoffs]
+    related: ["RTOS Fundamentals", "Interrupt-driven Design"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: bare_metal_vs_rtos_overview.md
+
+  - topic: Memory-Constrained Design
+    summary: "Techniques for efficient RAM/flash usage, code size control, and static allocation strategies."
+    category: embedded_systems
+    sub_category: optimisation
+    tags: [memory_constraints, static_allocation, optimisation]
+    related: ["Bare-metal vs RTOS", "Lightweight Cryptography"]
+    depth: high
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2300
+    output: memory_constrained_design_primer.md
+
+  - topic: Embedded Bootloaders
+    summary: "Design principles for secure, reliable firmware bootstrapping and firmware update verification."
+    category: embedded_systems
+    sub_category: bootloaders
+    tags: [bootloader, secure_boot, fota]
+    related: ["Secure Boot Chains", "FOTA (Firmware Over-The-Air)"]
+    depth: high
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2500
+    output: embedded_bootloaders_primer.md
+
+  - topic: Watchdog Timer Patterns
+    summary: "System integrity mechanisms using watchdogs for fault detection, recovery, and liveness guarantees."
+    category: embedded_systems
+    sub_category: safety
+    tags: [watchdog, fault_tolerance, reliability]
+    related: ["RTOS Fundamentals", "Interrupt-driven Design"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: watchdog_timer_patterns_primer.md
+
+  - topic: Task Scheduling Models
+    summary: "Cooperative, pre-emptive, cyclic executive, and time-triggered scheduling methods."
+    category: embedded_systems
+    sub_category: scheduling
+    tags: [scheduling, cyclic_executive, rtos]
+    related: ["RTOS Fundamentals", "POSIX Basics for Embedded Systems"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: task_scheduling_models_primer.md
+
+  - topic: Hardware Abstraction Layer (HAL) and BSP Concepts
+    summary: "Abstraction layers enabling portability, isolating hardware dependencies from application code."
+    category: embedded_systems
+    sub_category: architecture
+    tags: [hal, bsp, portability]
+    related: ["Layered Embedded Software Architecture"]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: hal_bsp_concepts_primer.md
+
+  # ============================================================
+  # SWEBOK – SOFTWARE ENGINEERING BODY OF KNOWLEDGE
+  # ============================================================
+
+  # ------------------------------------------------------------
+  # REQUIREMENTS ENGINEERING
+  # ------------------------------------------------------------
+  - topic: Requirements Engineering Fundamentals
+    summary: "Core principles of discovering, analysing, specifying, validating, and managing software requirements."
+    category: swebok
+    sub_category: requirements_engineering
+    tags: [requirements, analysis, specification]
+    related: ["Software Development Life Cycles", "Use Case Modelling"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: requirements_engineering_fundamentals.md
+
+  - topic: Requirements Elicitation Techniques
+    summary: "Methods for gathering requirements from stakeholders, systems, and domain constraints."
+    category: swebok
+    sub_category: requirements_engineering
+    tags: [elicitation, interviews, workshops]
+    related: ["Requirements Engineering Fundamentals", "Use Case Modelling"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: requirements_elicitation_techniques.md
+
+  - topic: Use Case Modelling
+    summary: "Modelling system interactions using actors and goals to refine functional requirements."
+    category: swebok
+    sub_category: requirements_engineering
+    tags: [use_cases, uml, requirements]
+    related: ["Requirements Traceability", "Requirements Engineering Fundamentals"]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1800
+    output: use_case_modelling.md
+
+  - topic: Requirements Traceability
+    summary: "Linking requirements to design, implementation, testing, and validation artefacts."
+    category: swebok
+    sub_category: requirements_engineering
+    tags: [traceability, requirements_management]
+    related: ["Requirements Engineering Fundamentals", "Testing Strategies and Levels"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: requirements_traceability_primer.md
+
+
+  # ------------------------------------------------------------
+  # SOFTWARE CONSTRUCTION
+  # ------------------------------------------------------------
+  - topic: Software Construction Principles
+    summary: "Core coding practices including decomposition, abstraction, and maintainability techniques."
+    category: swebok
+    sub_category: construction
+    tags: [construction, coding, maintainability]
+    related: ["SOLID Principles", "Code Review Practices"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: software_construction_principles.md
+
+  - topic: Defensive Programming
+    summary: "Designing code to anticipate misuse, invalid states, and unexpected failures."
+    category: swebok
+    sub_category: construction
+    tags: [defensive_programming, safety, robustness]
+    related: ["Error Handling Strategies", "Static Analysis Fundamentals"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: defensive_programming_primer.md
+
+  - topic: Error Handling Strategies
+    summary: "Structured approaches for managing failures through recovery, propagation, and safe defaults."
+    category: swebok
+    sub_category: construction
+    tags: [error_handling, resilience]
+    related: ["Defensive Programming", "Software Construction Principles"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: error_handling_strategies.md
+
+  - topic: Static Analysis Fundamentals
+    summary: "Static analysis techniques and tools used to detect defects, complexity, and non-compliance."
+    category: swebok
+    sub_category: construction
+    tags: [static_analysis, linting, quality]
+    related: ["Defensive Programming", "Testing Strategies and Levels"]
+    depth: high
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2500
+    output: static_analysis_fundamentals.md
+
+  - topic: Coding Standards and Guidelines
+    summary: "Role of coding standards such as MISRA, CERT, and organisational conventions."
+    category: swebok
+    sub_category: construction
+    tags: [coding_standards, misra, cert]
+    related: ["Static Analysis Fundamentals", "Software Construction Principles"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: coding_standards_and_guidelines.md
+
+
+  # ------------------------------------------------------------
+  # SOFTWARE MAINTENANCE
+  # ------------------------------------------------------------
+  - topic: Software Maintenance Fundamentals
+    summary: "Activities required after initial delivery, including fixes, adaptation, and enhancements."
+    category: swebok
+    sub_category: maintenance
+    tags: [maintenance, evolution]
+    related: ["Technical Debt Management", "Refactoring Strategies"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: software_maintenance_fundamentals.md
+
+  - topic: Technical Debt Management
+    summary: "Identifying, prioritising, and controlling the impact of design shortcuts and legacy issues."
+    category: swebok
+    sub_category: maintenance
+    tags: [technical_debt, cleanup]
+    related: ["Software Maintenance Fundamentals", "Refactoring Strategies"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: technical_debt_management_primer.md
+
+  - topic: Refactoring Strategies
+    summary: "Systematic improvement of code structure without altering external behaviour."
+    category: swebok
+    sub_category: maintenance
+    tags: [refactoring, clean_code]
+    related: ["Technical Debt Management", "Software Maintenance Fundamentals"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: refactoring_strategies.md
+
+  - topic: Software Evolution Models
+    summary: "Key models explaining how software changes over time and how to manage long-lived systems."
+    category: swebok
+    sub_category: maintenance
+    tags: [evolution, lifecycle]
+    related: ["Software Maintenance Fundamentals"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: software_evolution_models.md
+
+
+  # ------------------------------------------------------------
+  # CONFIGURATION MANAGEMENT
+  # ------------------------------------------------------------
+  - topic: Software Configuration Management Concepts
+    summary: "Management of artefacts, baselines, change control, and version identification."
+    category: swebok
+    sub_category: configuration_management
+    tags: [scm, baselines, change_control]
+    related: ["Source Control Systems", "Versioning and Release Engineering"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: scm_concepts_primer.md
+
+  - topic: Versioning and Release Engineering
+    summary: "Versioning conventions, release packaging, and deployment practices."
+    category: swebok
+    sub_category: configuration_management
+    tags: [release_engineering, versioning]
+    related: ["Continuous Integration Fundamentals", "SCM Concepts"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: versioning_and_release_engineering.md
+
+  - topic: Branching Models and Strategies
+    summary: "Common branching approaches such as Gitflow, trunk-based development, and feature branches."
+    category: swebok
+    sub_category: configuration_management
+    tags: [git, branching, scm]
+    related: ["Source Control Systems", "Versioning and Release Engineering"]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: branching_models_and_strategies.md
+
+
+  # ------------------------------------------------------------
+  # SOFTWARE ENGINEERING MANAGEMENT
+  # ------------------------------------------------------------
+  - topic: Software Project Planning
+    summary: "Estimation, scoping, work breakdown, and planning fundamentals."
+    category: swebok
+    sub_category: management
+    tags: [planning, estimation, wbs]
+    related: ["Risk Management in Software Projects"]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: software_project_planning_overview.md
+
+  - topic: Software Estimation Techniques
+    summary: "Effort and cost estimation methods such as function points, COCOMO, and expert judgement."
+    category: swebok
+    sub_category: management
+    tags: [estimation, cost_models]
+    related: ["Software Project Planning"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: software_estimation_techniques.md
+
+  - topic: Risk Management in Software Projects
+    summary: "Identification, analysis, mitigation, and monitoring of risks across the software lifecycle."
+    category: swebok
+    sub_category: management
+    tags: [risk_management, mitigation]
+    related: ["Software Project Planning"]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: software_risk_management.md
+
+  - topic: Software Metrics and Measurement
+    summary: "Quantitative approaches for assessing software quality, productivity, and project status."
+    category: swebok
+    sub_category: management
+    tags: [metrics, measurement]
+    related: ["Software Quality Assurance"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: software_metrics_and_measurement.md
+
+
+  # ------------------------------------------------------------
+  # SOFTWARE ENGINEERING PROCESS
+  # ------------------------------------------------------------
+  - topic: Software Development Life Cycles
+    summary: "Overview of waterfall, spiral, V-model, incremental, agile, and hybrid lifecycles."
+    category: swebok
+    sub_category: process
+    tags: [sdlc, lifecycle_models]
+    related: ["Software Project Planning", "Process Improvement Models"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2400
+    output: software_development_life_cycles.md
+
+  - topic: Process Improvement Models
+    summary: "Frameworks such as CMMI and ISO 12207 for continuous process improvement."
+    category: swebok
+    sub_category: process
+    tags: [process_improvement, cmmi, iso12207]
+    related: ["Software Development Life Cycles"]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: process_improvement_models_overview.md
+
+
+  # ------------------------------------------------------------
+  # SOFTWARE QUALITY
+  # ------------------------------------------------------------
+  - topic: Software Quality Fundamentals
+    summary: "Key concepts including reliability, correctness, robustness, and maintainability."
+    category: swebok
+    sub_category: quality
+    tags: [quality, reliability, correctness]
+    related: ["Software Metrics and Measurement", "Software Quality Assurance"]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: software_quality_fundamentals.md
+
+  - topic: Software Quality Assurance
+    summary: "Systematic quality processes such as audits, reviews, and verification techniques."
+    category: swebok
+    sub_category: quality
+    tags: [sqa, review, audit]
+    related: ["Software Quality Fundamentals", "Testing Strategies"]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: software_quality_assurance_overview.md
+
+  - topic: Software Reliability Engineering
+    summary: "Methods for analysing, predicting, and improving system reliability."
+    category: swebok
+    sub_category: quality
+    tags: [reliability, fault_tolerance]
+    related: ["Watchdog Timer Patterns", "Software Quality Fundamentals"]
+    depth: high
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: software_reliability_engineering.md
+
+
+  # ------------------------------------------------------------
+  # PROFESSIONAL PRACTICE
+  # ------------------------------------------------------------
+  - topic: Software Engineering Ethics
+    summary: "Ethical principles, responsibility, and professional conduct in software engineering."
+    category: swebok
+    sub_category: professional_practice
+    tags: [ethics, professionalism]
+    related: []
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1500
+    output: software_engineering_ethics.md
+
+  - topic: Legal and Licensing Considerations
+    summary: "Understanding intellectual property, licensing models, and regulatory obligations."
+    category: swebok
+    sub_category: professional_practice
+    tags: [legal, licensing, compliance]
+    related: []
+    depth: medium
+    audience: engineers
+    doc_type: "introduction"
+    length: 1500
+    output: legal_and_licensing_considerations.md
+
+  - topic: Collaboration and Team Communication
+    summary: "Effective communication, documentation, and teamwork practices in software delivery."
+    category: swebok
+    sub_category: professional_practice
+    tags: [communication, teamwork]
+    related: ["Docs-as-Code", "Code Review Practices"]
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1500
+    output: collaboration_and_team_communication.md
+
+# ============================================================
+# ARCHITECTURE – NEW TOPICS
+# ============================================================
+
+  - topic: Architectural Significance & Significant Requirements (ASRs)
+    summary: "Identification and management of requirements that drive architectural decisions."
+    category: architecture
+    sub_category: quality_attributes
+    tags: [architecture, asr, quality_attributes]
+    related: [ATAM, Software Architecture Views]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: asr_overview.md
+
+  - topic: ATAM (Architecture Tradeoff Analysis Method)
+    summary: "Scenario-based evaluation approach for analysing architectural decisions and trade-offs."
+    category: architecture
+    sub_category: evaluation_methods
+    tags: [atam, evaluation, tradeoffs]
+    related: [Quality Attributes, Software Architecture Views]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: atam_overview.md
+
+  - topic: Software Architecture Views
+    summary: "Logical, development, process, and physical views for representing architecture."
+    category: architecture
+    sub_category: views
+    tags: [architecture_views, documentation]
+    related: [C4 Model for Software Architecture, arc42 Template]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: architecture_views_primer.md
+
+  - topic: What Makes a Good Architecture
+    summary: "Core characteristics and attributes that define an effective and sustainable architecture."
+    category: architecture
+    sub_category: quality_attributes
+    tags: [architecture_quality, engineering]
+    related: [ATAM, Architectural Significance & Significant Requirements]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: good_architecture_overview.md
+
+
+  # ============================================================
+  # SOFTWARE ENGINEERING – NEW DESIGN PATTERNS
+  # ============================================================
+
+  - topic: Observer Pattern
+    summary: "Behavioural pattern enabling subscription-based notifications between objects."
+    category: software_engineering
+    sub_category: patterns
+    tags: [observer, design_patterns]
+    related: [Publish–Subscribe, Mediator Pattern]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: observer_pattern.md
+
+  - topic: Strategy Pattern
+    summary: "Behavioural pattern that encapsulates interchangeable algorithms under a common interface."
+    category: software_engineering
+    sub_category: patterns
+    tags: [strategy_pattern, behaviour]
+    related: [Factory Pattern, Template Method]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: strategy_pattern.md
+
+  - topic: Factory Pattern
+    summary: "Creational pattern for encapsulating object creation."
+    category: software_engineering
+    sub_category: patterns
+    tags: [factory, design_patterns]
+    related: [Strategy Pattern, Dependency Injection]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: factory_pattern.md
+
+  - topic: Singleton Pattern
+    summary: "Ensures a class has a single instance and provides global access to it."
+    category: software_engineering
+    sub_category: patterns
+    tags: [singleton, design_patterns]
+    related: [Factory Pattern]
+    depth: low
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1200
+    output: singleton_pattern.md
+
+  - topic: Template Method Pattern
+    summary: "Pattern that defines an algorithm’s structure while allowing subclasses to customise certain steps."
+    category: software_engineering
+    sub_category: patterns
+    tags: [template_method, design_patterns]
+    related: [Strategy Pattern]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: template_method_pattern.md
+
+  - topic: Mediator Pattern
+    summary: "Behavioural pattern that centralises complex communications between objects."
+    category: software_engineering
+    sub_category: patterns
+    tags: [mediator, design_patterns]
+    related: [Observer Pattern, Publish–Subscribe]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: mediator_pattern.md
+
+
+  # ============================================================
+  # SOFTWARE ENGINEERING – NEW ANTI-PATTERNS
+  # ============================================================
+
+  - topic: Big Ball of Mud
+    summary: "Common anti-pattern where software lacks clear architecture or structure."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, architecture]
+    related: [Spaghetti Code, Lava Flow]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 1800
+    output: big_ball_of_mud.md
+
+  - topic: Spaghetti Code
+    summary: "Tightly coupled, tangled code lacking modularity."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, code_quality]
+    related: [Big Ball of Mud, Lava Flow]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1500
+    output: spaghetti_code.md
+
+  - topic: Lava Flow
+    summary: "Dead code and legacy remnants that remain due to fear of removal."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, legacy]
+    related: [Big Ball of Mud]
+    depth: low
+    audience: software_engineers
+    doc_type: "introduction"
+    length: 1500
+    output: lava_flow.md
+
+  - topic: God Object
+    summary: "A single object accumulating too many responsibilities."
+    category: software_engineering
+    sub_category: anti_patterns
+    tags: [anti_pattern, god_object]
+    related: [Single Responsibility Principle (SOLID)]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 1800
+    output: god_object.md
+
+
+  # ============================================================
+  # DISTRIBUTED SYSTEMS – FUNDAMENTALS
+  # ============================================================
+
+  - topic: CAP Theorem
+    summary: "Trade-offs between consistency, availability, and partition tolerance."
+    category: distributed_systems
+    sub_category: fundamentals
+    tags: [cap_theorem, distributed_systems]
+    related: [Eventual Consistency, PACELC]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: cap_theorem.md
+
+  - topic: Eventual Consistency
+    summary: "Consistency model used in distributed systems where replicas converge over time."
+    category: distributed_systems
+    sub_category: consistency
+    tags: [eventual_consistency, distributed_systems]
+    related: [CAP Theorem, CRDTs]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: eventual_consistency.md
+
+  - topic: PACELC Theorem
+    summary: "Extension of CAP describing tradeoffs between latency and consistency even without partitions."
+    category: distributed_systems
+    sub_category: fundamentals
+    tags: [pacelc, distributed_systems]
+    related: [CAP Theorem, Eventual Consistency]
+    depth: high
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: pacelc_theorem.md
+
+
+  # ============================================================
+  # EMBEDDED SYSTEMS – NEW TOPICS
+  # ============================================================
+
+  - topic: Finite State Machines (FSMs)
+    summary: "Deterministic control logic representation for embedded and real-time systems."
+    category: embedded_systems
+    sub_category: fsm
+    tags: [fsm, embedded, state_machine]
+    related: [RTOS Fundamentals, Event-driven Architecture]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: fsm_overview.md
+
+  - topic: RTOS Fundamentals
+    summary: "Deterministic scheduling and task management for real-time embedded systems."
+    category: embedded_systems
+    sub_category: rtos
+    tags: [rtos, embedded, scheduling]
+    related: [Finite State Machines (FSMs), POSIX Threads]
+    depth: high
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2400
+    output: rtos_fundamentals.md
+
+  - topic: POSIX Threads (pthreads)
+    summary: "POSIX-compliant threading model for portable C/C++ systems."
+    category: embedded_systems
+    sub_category: realtime
+    tags: [posix, threads, concurrency]
+    related: [RTOS Fundamentals]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: posix_threads.md
+
+  - topic: Layered Embedded Architecture
+    summary: "Structured approach to partitioning embedded code into clear layers."
+    category: embedded_systems
+    sub_category: architecture
+    tags: [embedded_architecture, layering]
+    related: [Finite State Machines (FSMs)]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: layered_embedded_architecture.md
+
+
+  # ============================================================
+  # SWEBOK COVERAGE
+  # ============================================================
+
+  - topic: SWEBOK Overview
+    summary: "Guide to the core knowledge areas defined in the Software Engineering Body of Knowledge."
+    category: software_engineering
+    sub_category: principles
+    tags: [swebok, engineering]
+    related: [Software Engineering Practices, Testing Strategies and Levels]
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1800
+    output: swebok_overview.md
+
+  - topic: SWEBOK Knowledge Areas
+    summary: "Detailed breakdown of major SWEBOK areas including design, testing, maintenance, and quality."
+    category: software_engineering
+    sub_category: principles
+    tags: [swebok, knowledge_areas]
+    related: [SWEBOK Overview]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2400
+    output: swebok_knowledge_areas.md
+
+  - topic: Architecture Governance
+    summary: "Processes and controls that ensure architectures remain aligned to business and technical objectives."
+    category: architecture
+    sub_category: governance
+    tags: [architecture_governance, governance, standards]
+    related: [ATAM, Architectural Significance & Significant Requirements]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: architecture_governance.md
+
+  - topic: Architectural Refactoring
+    summary: "Methods for safely evolving and modernising software architecture without full rewrites."
+    category: architecture
+    sub_category: quality_attributes
+    tags: [refactoring, architecture_modernisation]
+    related: [Clean Architecture, ATAM]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: architectural_refactoring.md
+
+  - topic: Software Modularity
+    summary: "Principles and structures for designing modular, decoupled systems."
+    category: architecture
+    sub_category: principles
+    tags: [modularity, coupling, cohesion]
+    related: [SOLID Principles, Microservice Architecture]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: software_modularity.md
+
+  - topic: Idempotency in Distributed Systems
+    summary: "Ensuring operations can be safely retried without unintended effects."
+    category: distributed_systems
+    sub_category: fundamentals
+    tags: [idempotency, distributed_systems, reliability]
+    related: [Eventual Consistency, Saga Pattern]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: idempotency_primer.md
+
+  - topic: CRDTs (Conflict-Free Replicated Data Types)
+    summary: "Data structures that enable eventually consistent state without coordination."
+    category: distributed_systems
+    sub_category: consistency
+    tags: [crdts, distributed_systems, consistency]
+    related: [Eventual Consistency, CAP Theorem]
+    depth: high
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2600
+    output: crdts_primer.md
+
+  - topic: The Saga Pattern
+    summary: "Distributed transaction orchestration for long-running business processes."
+    category: distributed_systems
+    sub_category: fundamentals
+    tags: [saga, transactions, microservices]
+    related: [Event-driven Architecture, Idempotency]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: saga_pattern.md
+
+  - topic: Actor Model
+    summary: "Concurrency model based on isolated actors communicating via messages."
+    category: concurrency
+    sub_category: models
+    tags: [actor_model, concurrency, messaging]
+    related: [Event-driven Architecture, Reactive Systems]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: actor_model.md
+
+  - topic: Lock-free and Wait-free Algorithms
+    summary: "High-performance algorithms that avoid blocking and reduce contention."
+    category: concurrency
+    sub_category: synchronisation
+    tags: [lock_free, wait_free, concurrency]
+    related: [POSIX Threads (pthreads)]
+    depth: high
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2600
+    output: lock_free_algorithms.md
+
+  - topic: Memory Models
+    summary: "Formal definitions of how reads and writes behave in multicore systems."
+    category: concurrency
+    sub_category: models
+    tags: [memory_model, concurrency, cpu_architecture]
+    related: [Lock-free Algorithms]
+    depth: high
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2600
+    output: memory_models.md
+
+  - topic: Performance Profiling Fundamentals
+    summary: "Techniques for analysing CPU, memory, and I/O performance in software systems."
+    category: performance_engineering
+    sub_category: analysis
+    tags: [profiling, performance, optimisation]
+    related: [Lock-free Algorithms]
+    depth: medium
+    audience: software_engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: performance_profiling.md
+
+  - topic: Performance Anti-patterns
+    summary: "Common implementation choices that degrade throughput, latency, or resource efficiency."
+    category: performance_engineering
+    sub_category: anti_patterns
+    tags: [performance, anti_pattern]
+    related: [Performance Profiling Fundamentals]
+    depth: medium
+    audience: software_engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: performance_anti_patterns.md
+
+  - topic: Interrupt-driven Design
+    summary: "Event-driven execution using hardware interrupts in embedded software."
+    category: embedded_systems
+    sub_category: realtime
+    tags: [interrupts, embedded]
+    related: [Finite State Machines (FSMs), RTOS Fundamentals]
+    depth: high
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2400
+    output: interrupt_driven_design.md
+
+  - topic: DMA (Direct Memory Access)
+    summary: "Hardware-assisted data movement for efficient I/O without CPU intervention."
+    category: embedded_systems
+    sub_category: realtime
+    tags: [dma, embedded, memory]
+    related: [RTOS Fundamentals]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: dma_primer.md
+
+  - topic: Power Management in Embedded Systems
+    summary: "Low-power modes, wakeup strategies, and consumption optimisation."
+    category: embedded_systems
+    sub_category: architecture
+    tags: [low_power, energy_management, embedded]
+    related: [NB-IoT, LwM2M]
+    depth: medium
+    audience: embedded_engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: embedded_power_management.md
+
+  - topic: V-Model for Systems Engineering
+    summary: "Systems engineering lifecycle model linking verification and validation to design phases."
+    category: systems_engineering
+    sub_category: fundamentals
+    tags: [v_model, systems_engineering]
+    related: [MBSE, Systems Testing]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: v_model_overview.md
+
+  - topic: MBSE (Model-Based Systems Engineering)
+    summary: "Systems engineering approach using formal models to specify, design, and validate systems."
+    category: systems_engineering
+    sub_category: mbse
+    tags: [mbse, systems_modeling]
+    related: [V-Model, SysML]
+    depth: high
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2600
+    output: mbse_primer.md
+
+  - topic: SysML (Systems Modelling Language)
+    summary: "Graphical modelling language for representing complex systems engineering models."
+    category: systems_engineering
+    sub_category: mbse
+    tags: [sysml, modelling]
+    related: [MBSE, V-Model]
+    depth: high
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2600
+    output: sysml_primer.md
+
+  # ============================================================
+  # SOFTWARE DELIVERY LIFECYCLE (SDLC) — MODELS & FRAMEWORKS
+  # ============================================================
+
+  - topic: Software Development Lifecycle (SDLC) Overview
+    summary: "High-level overview of structured lifecycle phases used across software and systems engineering."
+    category: software_delivery
+    sub_category: sdlc_models
+    tags: [sdlc, lifecycle, process]
+    related: [Waterfall Model, V-Model, Agile Overview]
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1800
+    output: sdlc_overview.md
+
+  - topic: Waterfall Model
+    summary: "Plan-driven sequential lifecycle model with clearly defined phases."
+    category: software_delivery
+    sub_category: sdlc_models
+    tags: [waterfall, process_model]
+    related: [V-Model, SDLC Overview]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: waterfall_model.md
+
+  - topic: V-Model (Software & Systems)
+    summary: "Verification and validation-centric lifecycle model used heavily in systems engineering."
+    category: software_delivery
+    sub_category: sdlc_models
+    tags: [v_model, systems_engineering, lifecycle]
+    related: [Waterfall Model, MBSE, SWEBOK]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: v_model_software.md
+
+  - topic: Spiral Model
+    summary: "Risk-driven iterative development model combining prototyping and structured planning."
+    category: software_delivery
+    sub_category: sdlc_models
+    tags: [spiral_model, risk_management]
+    related: [Agile Overview, Waterfall Model]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: spiral_model.md
+
+  - topic: Iterative and Incremental Development
+    summary: "Lifecycle approach emphasising repeated cycles, incremental growth, and continuous learning."
+    category: software_delivery
+    sub_category: sdlc_models
+    tags: [iterative, incremental, lifecycle]
+    related: [Scrum, Kanban, Spiral Model]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: iterative_incremental.md
+
+
+  # ============================================================
+  # AGILE — FRAMEWORKS & METHODS
+  # ============================================================
+
+  - topic: Agile Overview
+    summary: "Core principles and mindset behind Agile software development."
+    category: software_delivery
+    sub_category: agile_frameworks
+    tags: [agile, principles, delivery]
+    related: [Scrum Framework, Kanban Method]
+    depth: low
+    audience: engineers
+    doc_type: "introduction"
+    length: 1500
+    output: agile_overview.md
+
+  - topic: Scrum Framework
+    summary: "Empirical process framework for managing work with roles, events, and artefacts."
+    category: software_delivery
+    sub_category: agile_frameworks
+    tags: [scrum, agile, framework]
+    related: [Agile Overview, Kanban Method]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: scrum_framework.md
+
+  - topic: Kanban Method
+    summary: "Flow-based Agile method focused on limiting work-in-progress and optimising throughput."
+    category: software_delivery
+    sub_category: agile_frameworks
+    tags: [kanban, agile, flow]
+    related: [Scrum Framework, Lean Principles]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2000
+    output: kanban_method.md
+
+  - topic: SAFe (Scaled Agile Framework)
+    summary: "Scaled Agile framework for coordinating multiple teams and large programmes."
+    category: software_delivery
+    sub_category: agile_frameworks
+    tags: [safe, scaled_agile]
+    related: [Scrum Framework, Lean Principles]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2400
+    output: safe_overview.md
+
+  - topic: Lean Principles for Software Delivery
+    summary: "Lean thinking applied to software development to minimise waste and maximise flow."
+    category: software_delivery
+    sub_category: agile_frameworks
+    tags: [lean, agile, flow]
+    related: [Kanban Method]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: lean_principles.md
+
+
+  # ============================================================
+  # SOFTWARE DELIVERY — PRACTICES
+  # ============================================================
+
+  - topic: Requirements Elicitation and Analysis
+    summary: "Techniques for capturing, clarifying, and validating requirements in engineering projects."
+    category: software_delivery
+    sub_category: practices
+    tags: [requirements, elicitation, analysis]
+    related: [Architecture Significance & Significant Requirements]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2400
+    output: requirements_elicitation.md
+
+  - topic: Backlog Management
+    summary: "Managing and refining product and engineering backlogs for effective delivery."
+    category: software_delivery
+    sub_category: practices
+    tags: [backlog, scrum, prioritisation]
+    related: [Scrum Framework, Agile Overview]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2000
+    output: backlog_management.md
+
+  - topic: Estimation Techniques (Agile & Traditional)
+    summary: "Engineering estimation methods including story points, t-shirt sizing, and parametric modelling."
+    category: software_delivery
+    sub_category: planning
+    tags: [estimation, planning]
+    related: [Scrum Framework, Iterative and Incremental Development]
+    depth: medium
+    audience: engineers
+    doc_type: "technical primer"
+    length: 2200
+    output: estimation_techniques.md
+
+  - topic: Dependency Management in Large Programmes
+    summary: "Managing cross-team and cross-system dependencies to reduce bottlenecks."
+    category: software_delivery
+    sub_category: practices
+    tags: [dependency_management, coordination]
+    related: [SAFe, Backlog Management]
+    depth: medium
+    audience: engineers
+    doc_type: "engineering overview"
+    length: 2200
+    output: dependency_management.md
+
+  - topic: Definition of Ready (DoR) and Definition of Done (DoD)
+    summary: "Shared quality gates ensuring work is started and completed consistently."
+    category: software_delivery
+    sub_category: practices
+    tags: [dor, dod, quality]
+    related: [Scrum Framework, Backlog Management]
+    depth: low
+    audience: engineers
+    doc_type: "technical primer"
+    length: 1600
+    output: dor_dod.md

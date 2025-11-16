@@ -1,0 +1,356 @@
+handbook:
+  title: "Developer Handbook"
+  root: "developer_handbook"
+  audience: "All engineering teams across the organisation"
+  description: >
+    Organisation-wide ways of working, engineering methods, standards, 
+    and shared practices. Product-agnostic, discipline-inclusive, and 
+    designed for long-term maintainability.
+
+template: |
+  You are writing an internal engineering handbook page. 
+  The goal is to explain the topic clearly, completely, and with enough depth 
+  that an engineer can apply the guidance immediately without external clarification.
+
+  ## Section
+  {{section.title}}
+
+  ## Page
+  {{page.title}}
+
+  ## Page Intent
+  {{page.intent or "Explain the topic clearly and practically."}}
+
+  ## Writing Guidance
+  Write in clear, structured British English suitable for a professional engineering wiki.
+
+  Your explanation **must**:
+  - Cover the subject **fully and accurately**, with no hand-waving.
+  - Explain not only *what* to do, but *why it matters*.
+  - Provide enough detail that a new team member could follow the advice confidently.
+  - Include practical examples when they genuinely help understanding.
+  - Break down complex ideas into understandable parts without oversimplifying.
+  - Be concise but not shallow — ensure the core ideas, rationale, and expectations are all covered.
+  - Produce standalone Markdown that fits into a wiki without external dependencies.
+  - Avoid filler, generalities, or marketing language.
+
+  ## Output Format
+  Provide a fully written Markdown page.
+  Use clear headings and subheadings where they add clarity.
+  Do not include HTML or non-Markdown formatting.
+
+
+sections:
+
+  # --------------------------------------------------------------------
+  - id: "01_introduction"
+    title: "Introduction"
+    pages:
+      - file: "overview.md"
+        title: "Overview"
+        intent: "Why this handbook exists and who it is for."
+
+      - file: "principles.md"
+        title: "Core Principles"
+        intent: "Organisational beliefs such as reliability, traceability, and incremental delivery."
+
+      - file: "structure.md"
+        title: "Handbook Structure"
+        intent: "How the handbook is organised and how teams should navigate it."
+
+  # --------------------------------------------------------------------
+  - id: "02_engineering_philosophy"
+    title: "Engineering Philosophy"
+    pages:
+      - file: "core_principles.md"
+        title: "Core Principles"
+        intent: "Autonomy, mastery, purpose; context-driven judgement."
+
+      - file: "cultural_values.md"
+        title: "Cultural Values"
+        intent: "Psychological safety, craftsmanship, and healthy collaboration."
+
+  # --------------------------------------------------------------------
+  - id: "03_organisation_roles"
+    title: "Organisation Roles"
+    pages:
+      - file: "roles_overview.md"
+        title: "Roles Overview"
+        intent: "Functional responsibilities and boundaries across disciplines."
+
+      - file: "collaboration_interfaces.md"
+        title: "Collaboration Interfaces"
+        intent: "Team handshakes, inputs/outputs, dependency management."
+
+      - file: "decision_making.md"
+        title: "Decision Making"
+        intent: "Governance structure, approvals, and decision quality."
+
+  # --------------------------------------------------------------------
+  - id: "04_ways_of_working"
+    title: "Ways of Working"
+    pages:
+      - file: "overview.md"
+        title: "Workflow Overview"
+        intent: "Hybrid V-model + Agile workflow summary."
+
+      - file: "principles.md"
+        title: "Delivery Principles"
+        intent: "WIP limits, inspect-and-adapt, definition of ready/done."
+
+      - file: "process.md"
+        title: "End-to-End Process"
+        intent: "Lifecycle flow including gates and artefacts."
+
+  # --------------------------------------------------------------------
+  - id: "05_requirements_features_userstories"
+    title: "Requirements, Features, and User Stories"
+    pages:
+      - file: "requirements.md"
+        title: "Requirements"
+        intent: "How to write and verify good requirements."
+
+      - file: "features.md"
+        title: "Features"
+        intent: "Feature definition, decomposition, and linking to requirements."
+
+      - file: "user_stories.md"
+        title: "User Stories"
+        intent: "User story creation, INVEST, and acceptance criteria."
+
+      - file: "traceability.md"
+        title: "Traceability"
+        intent: "Trace rules, matrices, and cross-referencing practices."
+
+  # --------------------------------------------------------------------
+  - id: "06_planning_refinement_estimation"
+    title: "Planning, Refinement, and Estimation"
+    pages:
+      - file: "refinement.md"
+        title: "Refinement"
+        intent: "Backlog refinement workflow and collaboration."
+
+      - file: "estimation.md"
+        title: "Estimation"
+        intent: "Approaches to estimation, calibration, and policy."
+
+      - file: "sprint_planning.md"
+        title: "Sprint Planning"
+        intent: "Planning goals, capacity thinking, and scope control."
+
+      - file: "risk_management_RAID.md"
+        title: "Risk Management (RAID)"
+        intent: "Managing risks, assumptions, issues, and dependencies."
+
+  # --------------------------------------------------------------------
+  - id: "07_development_workflow"
+    title: "Development Workflow"
+    pages:
+      - file: "branching_strategy.md"
+        title: "Branching Strategy"
+        intent: "Long-lived feature branches, rebasing, and PR lifecycle."
+
+      - file: "build_integration.md"
+        title: "Build and Integration"
+        intent: "CI rules, build graph, versioning, and artefacts."
+
+      - file: "commit_practices.md"
+        title: "Commit Practices"
+        intent: "Commit structure, traceability rules, commit messages."
+
+      - file: "feature_flags.md"
+        title: "Feature Flags"
+        intent: "Toggle lifecycle, embedded constraints, kill-switch policies."
+
+  # --------------------------------------------------------------------
+  - id: "08_code_review_quality_gates"
+    title: "Code Review and Quality Gates"
+    pages:
+      - file: "overview.md"
+        title: "Overview"
+        intent: "Quality metrics, static analysis, coverage, MISRA."
+
+      - file: "checklist.md"
+        title: "Review Checklist"
+        intent: "Expanded code review checklist with rationale."
+
+  # --------------------------------------------------------------------
+  - id: "09_architecture_design_practices"
+    title: "Architecture and Design Practices"
+    pages:
+      - file: "design_guidelines.md"
+        title: "Design Guidelines"
+        intent: "Patterns, layering, concurrency, resource constraints."
+
+      - file: "adrs.md"
+        title: "ADRs"
+        intent: "How to write, structure, and manage Architecture Decision Records."
+
+      - file: "communication_canvas_arc42.md"
+        title: "Architecture Communication Canvas (arc42)"
+        intent: "How to use the arc42 canvas for structured architectural thinking."
+
+      - file: "hardware_integration.md"
+        title: "Hardware–Firmware Integration"
+        intent: "Co-design touchpoints and joint workflows."
+
+  # --------------------------------------------------------------------
+  - id: "10_testing_verification"
+    title: "Testing and Verification"
+    pages:
+      - file: "unit_test_strategy.md"
+        title: "Unit Test Strategy"
+        intent: "Determinism, mocking, coverage, and CI expectations."
+
+      - file: "developer_testing.md"
+        title: "Developer Testing"
+        intent: "Overview of what testing is expected to be done by the developer as part of their normal process."
+
+      - file: "developer_T&V.md"
+        title: "Developer T&V"
+        intent: "Overview of devlopers running T&V tests in developer test lanes to run regression tests etc as part of development process and for fxing bugs."
+
+  # --------------------------------------------------------------------
+  - id: "11_tooling_environment"
+
+    title: "Tooling and Environment"
+    pages:
+      - file: "CodingStandards.md"
+        title: "Coding Standards"
+        intent: "Embedded C rules, MISRA mapping, linting."
+
+      - file: "build_system.md"
+        title: "Build System"
+        intent: "Build reproducibility, containerisation, toolchains."
+
+      - file: "environment_standards.md"
+        title: "Environment Standards"
+        intent: "OS images, dependency pinning, tooling baselines."
+
+      - file: "toolchain_setup.md"
+        title: "Toolchain Setup"
+        intent: "SDK installation, verification, and CI parity."
+
+  # --------------------------------------------------------------------
+  - id: "12_documentation_traceability"
+    title: "Documentation and Traceability"
+    pages:
+      - file: "docs_as_code.md"
+        title: "Docs-as-Code"
+        intent: "Repository structure, review workflow, link rules."
+
+      - file: "design_docs.md"
+        title: "Design Documents"
+        intent: "When to create high-level design docs vs ADRs vs RFCs."
+
+      - file: "knowledge_base.md"
+        title: "Knowledge Base"
+        intent: "Runbooks, FAQs, and onboarding context."
+
+      - file: "traceability_matrix.md"
+        title: "Traceability Matrix"
+        intent: "How to generate, validate, and publish traceability artefacts."
+
+  # --------------------------------------------------------------------
+  - id: "13_release_delivery"
+    title: "Release and Delivery"
+    pages:
+      - file: "release_process.md"
+        title: "Release Process"
+        intent: "Gate criteria, evidence, and release mechanics."
+
+      - file: "build_identification.md"
+        title: "Build Identification"
+        intent: "SemVer/CalVer, metadata, SBOM."
+
+      - file: "deployment.md"
+        title: "Deployment"
+        intent: "Programming for production and staging rollouts."
+
+      - file: "post_release.md"
+        title: "Post-Release"
+        intent: "Hotfix rules, incident handling, L3 support."
+
+  # --------------------------------------------------------------------
+  - id: "14_quality_safety_security"
+    title: "Quality, Safety, and Security"
+    pages:
+      - file: "quality_metrics.md"
+        title: "Quality Metrics"
+        intent: "DORA metrics, defect density, MTBF surrogates."
+
+      - file: "safety_practices.md"
+        title: "Safety Practices"
+        intent: "Hazard analysis, FMEA, safety cases."
+
+      - file: "security_practices.md"
+        title: "Security Practices"
+        intent: "Threat modelling, cert/key handling, SBOM, vulnerability management."
+
+  # --------------------------------------------------------------------
+  - id: "15_maintenance_field_support"
+    title: "Maintenance and Field Support"
+    pages:
+      - file: "overview.md"
+        title: "Overview"
+        intent: "Support tiers, flows, L2/L3 responsibilities."
+
+      - file: "bug_tracking.md"
+        title: "Bug Tracking"
+        intent: "Severity policies, evidence collection, triage."
+
+      - file: "field_updates.md"
+        title: "Field Updates"
+        intent: "OTA and field-programming workflows."
+
+  # --------------------------------------------------------------------
+  - id: "16_continuous_improvement"
+    title: "Continuous Improvement"
+    pages:
+      - file: "retrospectives.md"
+        title: "Retrospectives"
+        intent: "Formats, follow-up rules, culture of prevention."
+
+      - file: "technical_debt.md"
+        title: "Technical Debt"
+        intent: "Catalogue, budgeting, and remediation."
+
+      - file: "metrics_dashboards.md"
+        title: "Metrics and Dashboards"
+        intent: "What to visualise and why."
+
+  # --------------------------------------------------------------------
+  - id: "17_onboarding_learning"
+    title: "Onboarding and Learning"
+    pages:
+      - file: "first_week.md"
+        title: "First Week"
+        intent: "Getting new engineers productive quickly."
+
+      - file: "first_month.md"
+        title: "First Month"
+        intent: "Structured learning plan."
+
+      - file: "mentorship.md"
+        title: "Mentorship"
+        intent: "Expectations for mentors and mentees."
+
+      - file: "training_resources.md"
+        title: "Training Resources"
+        intent: "Recommended internal/external materials."
+
+  # --------------------------------------------------------------------
+  - id: "18_appendices"
+    title: "Appendices"
+    pages:
+      - file: "glossary.md"
+        title: "Glossary"
+        intent: "Terms, abbreviations, common language."
+
+      - file: "industry_alignment.md"
+        title: "Industry Alignment"
+        intent: "Mapping to external standards."
+
+      - file: "templates.md"
+        title: "Templates"
+        intent: "Links and references to reusable templates."

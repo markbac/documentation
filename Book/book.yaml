@@ -1,0 +1,591 @@
+template: |
+  You are writing a section of a cohesive engineering book titled:
+  "{{book.title}}".
+
+  This section must be written in continuous, mature, narrative prose—
+  similar in tone and structure to a professional engineering textbook.
+  Avoid list-heavy summaries unless they are genuinely the strongest way
+  to present information. The default style should be paragraphs that develop
+  ideas logically, using subheadings where useful.
+
+  ## Book Audience
+  {{book.audience}}
+
+  ## Book Context
+  {{book.description}}
+
+  ## Previous Chapters Summary (for narrative and conceptual continuity)
+  {{previous_summary}}
+
+  ## Upcoming Chapters Outline (to avoid repetition and pre-empting)
+  {{future_outline}}
+
+  ## Current Chapter Intent
+  {{chapter.intent}}
+
+  ## Current Section Summary
+  {{section.summary}}
+
+  ## Narrative Writing Requirements
+  Write this section as a genuine part of a book chapter:
+    - Use structured paragraphs and clear subheadings.
+    - Develop ideas through explanation, comparison, and reasoning rather than lists.
+    - Use lists sparingly, only where they meaningfully improve clarity.
+    - Avoid instructional bullet-point formats (e.g. “Purpose / Autonomy / Mastery”).
+    - Maintain a steady narrative voice suitable for an engineering textbook.
+    - Use technical precision, but keep the flow suitable for long-form reading.
+    - Avoid conversational tone, anecdotes, or “tips”.
+    - Avoid marketing language, hype, or subjective claims.
+
+  ## Technical Exposition Requirements
+    - Define core ideas clearly and place them in their correct context.
+    - Explain mechanisms, behaviours, and architectural concepts at the required depth.
+    - Describe practical realities such as workflow, constraints, assumptions,
+      trade-offs, and variations.
+    - Reference relevant standards, frameworks, and engineering norms when appropriate.
+    - Ensure strict consistency with terminology and explanations introduced earlier.
+
+  ## Section Formatting Requirements
+    - The section must begin with a single top-level heading:
+      # {{section.title}}
+    - Do not include any YAML front matter or lines beginning with '---'.
+    - After the opening H1 heading, you may freely use lower-level headings
+      (##, ###, ####) as appropriate to structure the narrative.
+    - Do not place any other heading above level 1.
+
+  ## Mermaid Diagram Rules (Strict)
+  When a diagram would improve understanding and can be expressed using Mermaid,
+  include a valid Mermaid diagram. Requirements:
+    - Only create diagrams that conform to official Mermaid grammar.
+    - Only use supported link/arrow types.
+    - Do not invent arrow styles or combine unsupported syntactic patterns.
+    - Wrap node titles in square brackets, e.g. NodeA[Client Device].
+    - Use simple, correct label syntax.
+    - Avoid unsupported characters or link operators.
+    - Do not describe a diagram in prose if it can be represented in Mermaid.
+    - If a concept cannot be diagrammed in Mermaid, suggest the most relevant
+      alternative visual (e.g., timing diagram, conceptual illustration).
+
+  ## Practical Engineering Considerations
+    - Highlight real integration points, architectural or organisational implications,
+      trade-offs, failure modes, and lifecycle realities.
+    - Incorporate the types of considerations an engineer would need to apply this
+      knowledge in practice.
+
+  Target length: {{section.length}} words. This is a target, adjust as neccessary to ensure sufficient depth and clarity.
+
+  Write the full book-quality section now.
+
+book:
+  title: "Cornerstone: A Hybrid Delivery Framework for Product Development"
+  audience: >
+    Engineers, engineering managers, firmware/software developers, systems engineers,
+    solution architects, technical leaders, and cross-disciplinary product teams working
+    on integrated products across software, firmware, hardware, and mechanical domains.
+  description: >
+    This book presents Cornerstone, a hybrid development philosophy integrating structured
+    systems engineering, agile iteration, architectural discipline, outcome-focused leadership,
+    and Docs-as-Code. It provides a comprehensive model for modern multi-disciplinary
+    product development, emphasising clarity, traceability, adaptability, and sustained flow.
+
+  outline:
+    - { number: 1, title: "An Approach to Engineering Leadership and Delivery" }
+    - { number: 2, title: "Introduction to Cornerstone – Bridging the Divide" }
+    - { number: 3, title: "Foundations of Hybrid Development" }
+    - { number: 4, title: "How Cornerstone Differentiates from Existing Frameworks" }
+    - { number: 5, title: "Core Principles of Cornerstone" }
+    - { number: 6, title: "The Cornerstone Lifecycle" }
+    - { number: 7, title: "Culture & Leadership for Cornerstone Success" }
+    - { number: 8, title: "Key Functions and Managing Living Artifacts" }
+    - { number: 9, title: "Practical Risk Management in Cornerstone" }
+    - { number: 10, title: "Cornerstone in Practice – Software & Firmware Development" }
+    - { number: 11, title: "Cornerstone for Integrated Products – Hardware & Mechanical" }
+    - { number: 12, title: "Managing Dependencies and PLM Integration" }
+    - { number: 13, title: "Tools and Technologies for Cornerstone Success" }
+    - { number: 14, title: "Tailoring Cornerstone" }
+    - { number: 15, title: "Adopting Cornerstone – Strategy, Pitfalls, and Rollout" }
+    - { number: 16, title: "Measuring Outcomes and Estimation" }
+    - { number: 17, title: "Case Studies" }
+    - { number: 18, title: "Scaling Cornerstone" }
+    - { number: 19, title: "Advanced Topics and the Future of Cornerstone" }
+    - { number: 20, title: "Conclusion – The Path Forward" }
+
+chapters:
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 1 — SEED FILE
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 1
+    title: "An Approach to Engineering Leadership and Delivery"
+    seed_file: "An-Approach-to-Engineering-Leadership-and-Delivery.md"
+    intent: >
+      Establish the philosophical foundation for Cornerstone: people-centred
+      leadership, architectural thinking, outcome orientation, systems thinking,
+      sustainability, iterative evolution, and cross-disciplinary coherence.
+      This chapter defines the 'why' and the fundamental principles guiding
+      the entire book.
+    output: "chapter_01.md"
+    sections:
+      - title: "Full Chapter"
+        summary: >
+          Use the existing "An-Approach-to-Engineering-Leadership-and-Delivery.md" content as the framework for this chapter. Ensure all points in seed file are incorporated into the chapter.
+        depth: high
+        length: 2400
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 2
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 2
+    title: "Introduction to Cornerstone – Bridging the Divide"
+    intent: >
+      Introduce the motivation and need for a hybrid framework. Explain the
+      modern product development landscape, contrasting its pressures with
+      the limitations of traditional and pure Agile approaches. Provide a
+      conceptual overview of Cornerstone and set expectations for the reader.
+    output: "chapter_02.md"
+    sections:
+      - title: "2.1 The Modern Product Development Landscape"
+        summary: >
+          Explain escalating product complexity, multi-disciplinary constraints,
+          longer hardware lead times, regulatory pressures, and increased
+          customer expectations. Highlight the shortcomings of both waterfall-style
+          models and pure Agile when applied to integrated systems.
+        depth: medium
+        length: 2000
+
+      - title: "2.2 Introducing Cornerstone – The Best of All Approaches"
+        summary: >
+          Provide the conceptual definition of Cornerstone: a pragmatic,
+          adaptive hybrid designed for integrated product environments.
+          Explain the philosophy without entering lifecycle detail yet.
+        depth: medium
+        length: 2000
+
+      - title: "2.3 How This Book Will Guide You"
+        summary: >
+          Outline how the book is structured, what readers will gain, and how
+          later chapters deepen the ideas introduced here.
+        depth: low
+        length: 1000
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 3 – Foundations of Hybrid Development
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 3
+    title: "Foundations of Hybrid Development"
+    intent: >
+      Establish the conceptual base for hybrid methodologies by revisiting
+      the V-model, Agile principles, and the inherent tensions that arise when
+      building integrated systems. Prepare the reader for the Cornerstone
+      lifecycle introduced in later chapters.
+    output: "chapter_03.md"
+    sections:
+      - title: "3.1 The V-Model Revisited"
+        summary: >
+          Describe the classical V-Model: phases, benefits, where it excels,
+          where it fails, and why its determinism breaks down in volatile or
+          cross-disciplinary contexts. Include a valid Mermaid diagram.
+        depth: medium
+        length: 2000
+
+      - title: "3.2 The Agile Manifesto & Principles"
+        summary: >
+          Explain Agile values, frameworks, strengths, and limitations for hardware,
+          regulated environments, and mixed-discipline delivery.
+        depth: medium
+        length: 2000
+
+      - title: "3.3 The Inherent Tension – Why Hybrids Emerge"
+        summary: >
+          Show why structured predictability and iterative adaptability must
+          coexist. Define the natural emergence of hybrid approaches.
+        depth: medium
+        length: 2000
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 4 – Differentiating Cornerstone
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 4
+    title: "How Cornerstone Differentiates from Existing Frameworks"
+    intent: >
+      Compare Cornerstone with established methodologies (traditional,
+      Agile, scaling frameworks, Lean, and other hybrids). Show where Cornerstone
+      aligns, where it diverges, and why it is uniquely suited to integrated
+      product development.
+    output: "chapter_04.md"
+    sections:
+      - { title: "4.1 The Need for a Tailored Approach", summary: "Explain why no single model fits all, especially for integrated products.", depth: medium, length: 1000 }
+      - { title: "4.2 Strengths Drawn from Traditional Approaches", summary: "Explain which structured benefits Cornerstone inherits.", depth: medium, length: 2000 }
+      - { title: "4.3 Strengths Drawn from Agile/Iterative Approaches", summary: "Explain what agility contributes to Cornerstone.", depth: medium, length: 2000 }
+      - { title: "4.4 Differences vs Scaling Frameworks", summary: "Explain flexibility versus prescriptive scaling frameworks.", depth: medium, length: 2000 }
+      - { title: "4.5 Differences vs Lean/Continuous Improvement", summary: "Explain Lean alignment but also lifecycle structure gaps Lean does not cover.", depth: medium, length: 2000 }
+      - { title: "4.6 Differences vs Other Hybrid Models", summary: "Explain why Cornerstone is uniquely tuned to multi-disciplinary engineering.", depth: medium, length: 2000 }
+      - { title: "4.7 Unique Value Proposition", summary: "Summarise what makes Cornerstone distinct.", depth: low, length: 1000 }
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 5 – Core Principles of Cornerstone
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 5
+    title: "Core Principles of Cornerstone – Operationalising the Philosophy"
+    intent: >
+      Translate the philosophical foundations from Chapter 1 into a practical,
+      actionable set of core principles. Show how each principle contributes to
+      predictable, high-quality delivery in integrated product environments.
+    output: "chapter_05.md"
+    sections:
+      - title: "5.1 Iterative Product Evolution"
+        summary: >
+          Explain how iterative development underpins the entire framework.
+          Cover evolutionary architecture, continuous refinement, and aligning
+          iteration length with hardware/firmware constraints.
+        depth: medium
+        length: 2000
+
+      - title: "5.2 Continuous Verification & Validation"
+        summary: >
+          Explain shift-left testing, integrated verification, automated build/test
+          pipelines, and the essential difference between component-level and
+          system-level V&V within Cornerstone.
+        depth: medium
+        length: 2000
+
+      - title: "5.3 Cross-Functional Collaboration"
+        summary: >
+          Describe the role of multidisciplinary collaboration, especially
+          where software, firmware, hardware and mechanical work must converge.
+          Highlight communication patterns and interface alignment.
+        depth: medium
+        length: 2000
+
+      - title: "5.4 Adaptive Planning"
+        summary: >
+          Explain long-range intent combined with short-range tactical flexibility.
+          Describe rolling-wave planning and balancing predictability with discovery.
+        depth: medium
+        length: 2000
+
+      - title: "5.5 Documentation as an Enabler"
+        summary: >
+          Introduce Docs-as-Code in practice, explain living design documents,
+          traceability, and documentation that improves flow rather than hindering it.
+        depth: medium
+        length: 2000
+
+      - title: "5.6 Risk-Driven Development"
+        summary: >
+          Explain the principle of tackling the highest-risk items first,
+          including technical risk, hardware supply risk, architectural uncertainty,
+          and regulatory risks.
+        depth: medium
+        length: 2000
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 6 – The Cornerstone Lifecycle
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 6
+    title: "The Cornerstone Lifecycle – A Fusion of Discipline and Agility"
+    intent: >
+      Define the full lifecycle structure used in Cornerstone: the Structured
+      Foundation, the Iterative Development Core, and the Rigorous Validation Arm.
+      Show how this lifecycle maintains traceability, supports continuous learning,
+      and accommodates multi-disciplinary delivery.
+    output: "chapter_06.md"
+    sections:
+      - title: "6.1 The Structured Foundation"
+        summary: >
+          Explain the purpose of the early lifecycle: requirements, architecture,
+          constraints, traceability, and alignment. Describe artefacts generated and
+          how they feed the rest of the lifecycle.
+        depth: high
+        length: 2000
+
+      - title: "6.2 The Iterative Development Core"
+        summary: >
+          Describe the core engine where most design, build, integration, and
+          component-level verification happens. Include diagrams showing iterative flow.
+        depth: high
+        length: 2000
+
+      - title: "6.3 The Rigorous Validation Arm"
+        summary: >
+          Explain system-level integration, full-system verification, regulatory testing,
+          and acceptance processes. Highlight integration of hardware/firmware/software.
+        depth: high
+        length: 1800
+
+      - title: "6.4 Transition Points and Gates"
+        summary: >
+          Explain Transition Gate 1 and Transition Gate 2, how they function, and how
+          they avoid heavyweight bureaucracy while providing necessary control.
+        depth: medium
+        length: 1200
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 7 – Culture & Leadership
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 7
+    title: "Culture and Leadership for Cornerstone Success"
+    intent: >
+      Describe the cultural and leadership foundations required for Cornerstone to
+      succeed: empowerment, psychological safety, outcome-driven leadership,
+      mentoring, and continuous improvement.
+    output: "chapter_07.md"
+    sections:
+      - { title: "7.1 Building a Culture of Trust and Empowerment", summary: "Explain behaviours, communication patterns, leadership posture, and cross-functional cohesion.", depth: medium, length: 1500 }
+      - { title: "7.2 Outcome-Driven Leadership", summary: "Explain shifting from output metrics to value, clarity of goals, adaptive leadership.", depth: medium, length: 1300 }
+      - { title: "7.3 Mentoring and Skill Development", summary: "Explain how leaders develop capabilities and hybrid delivery skills.", depth: low, length: 900 }
+      - { title: "7.4 Championing Continuous Improvement", summary: "Explain continuous learning, retrospectives, feedback loops, and culture reinforcement.", depth: medium, length: 1200 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 8 – Functions and Living Artifacts
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 8
+    title: "Key Functions and Managing Living Artifacts"
+    intent: >
+      Define the essential roles and touchpoints in Cornerstone, followed by a detailed
+      explanation of living artefact types, conventions, governance, and practical
+      Docs-as-Code usage.
+    output: "chapter_08.md"
+    sections:
+      - { title: "8.1 Key Functions and Responsibilities", summary: "Describe the functional roles: product vision, architecture, process facilitation, cross-functional teams, QA/testing.", depth: high, length: 2000 }
+      - { title: "8.2 Cornerstone Artifacts – Practical Docs-as-Code", summary: "Explain all core artefacts, their evolution, workflows, governance, CI integration, best practices.", depth: high, length: 2500 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 9 – Risk Management
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 9
+    title: "Practical Risk Management in Cornerstone"
+    intent: >
+      Provide a practical, engineering-oriented approach to risk identification,
+      analysis, mitigation, and monitoring across software, firmware, hardware,
+      mechanical and regulatory domains.
+    output: "chapter_09.md"
+    sections:
+      - { title: "9.1 Why Risk Management is Critical", summary: "Establish risk philosophy and its alignment with hybrid ways of working.", depth: medium, length: 1200 }
+      - { title: "9.2 Risk Identification & Analysis", summary: "Explain cross-functional techniques, analysis, probability-impact matrices, risk registers.", depth: medium, length: 1600 }
+      - { title: "9.3 Risk Mitigation Strategies", summary: "Describe de-risking through prototyping, analysis, modelling, gating, simulations.", depth: medium, length: 1500 }
+      - { title: "9.4 Specific Risk Types for Integrated Products", summary: "Describe hardware, firmware, software, regulatory, and market risks.", depth: medium, length: 1500 }
+      - { title: "9.5 Continuous Risk Monitoring & Review", summary: "Explain lightweight integration of risk into ongoing delivery.", depth: low, length: 900 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 10 – Software/Firmware Practice
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 10
+    title: "Cornerstone in Practice – Software & Firmware Development"
+    intent: >
+      Provide concrete implementation detail for software and firmware
+      development within the Cornerstone lifecycle, covering requirements,
+      architecture, iteration, CI, testing, and version control.
+    output: "chapter_10.md"
+    sections:
+      - { title: "10.1 Requirements Gathering & Analysis", summary: "Explain structured-to-detailed requirement breakdown, traceability, acceptance criteria.", depth: high, length: 1800 }
+      - { title: "10.2 Architectural & Detailed Design", summary: "Explain use of C4, ADRs, modular design, RFCs, interface reasoning.", depth: high, length: 1800 }
+      - { title: "10.3 Iterative Development Cycles", summary: "Explain practical iteration for embedded systems, CI, static analysis.", depth: high, length: 1800 }
+      - { title: "10.4 Verification & Validation", summary: "Explain unit, integration, system, HIL testing, automation, evidence.", depth: high, length: 1800 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 11 – Hardware/Mechanical Practice
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 11
+    title: "Cornerstone for Integrated Products – Hardware & Mechanical"
+    intent: >
+      Extend Cornerstone to hardware and mechanical disciplines, showing how
+      iteration, validation, and dependency management operate across physical products.
+    output: "chapter_11.md"
+    sections:
+      - { title: "11.1 Challenges of Hardware Integration", summary: "Explain lead times, costs, regulatory constraints.", depth: medium, length: 1200 }
+      - { title: "11.2 Concurrent Engineering", summary: "Explain overlapping phases, multidisciplinary coordination.", depth: medium, length: 1300 }
+      - { title: "11.3 Hardware Iteration & Software Synchronisation", summary: "Explain decoupling, synchronisation, design loops.", depth: medium, length: 1500 }
+      - { title: "11.4 Design & Development for Hardware/Mechanical", summary: "Explain CAD, EDA, prototyping, ADRs for hardware.", depth: high, length: 1800 }
+      - { title: "11.5 Integrated Verification & Validation", summary: "Explain testing types, compliance, system integration.", depth: high, length: 1600 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 12 – Dependencies & PLM
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 12
+    title: "Managing Complex Dependencies and PLM Integration"
+    intent: >
+      Provide a rigorous treatment of dependency mapping, interface management,
+      hardware-software alignment, and formal PLM integration.
+    output: "chapter_12.md"
+    sections:
+      - { title: "12.1 Managing Complex Dependencies & Integration Points", summary: "Explain ICDs, dependency mapping, integration cadence.", depth: high, length: 2000 }
+      - { title: "12.2 PLM Integration", summary: "Explain configuration management, baselines, traceability, change control.", depth: high, length: 1800 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 13 – Tools & Tech
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 13
+    title: "Tools and Technologies for Cornerstone Success"
+    intent: >
+      Provide a pragmatic overview of tools used to support Cornerstone
+      implementation across planning, development, documentation, traceability,
+      testing, and simulation.
+    output: "chapter_13.md"
+    sections:
+      - { title: "13.1 Project & Lifecycle Management Tools", summary: "Explain tooling for backlogs, traceability, workflow alignment.", depth: low, length: 900 }
+      - { title: "13.2 Version Control Systems", summary: "Explain Git usage for all artefacts, branching strategy patterns.", depth: low, length: 900 }
+      - { title: "13.3 CI/CD", summary: "Explain automation pipelines, test integration, deployment.", depth: low, length: 900 }
+      - { title: "13.4 Documentation & Modelling Tools", summary: "Explain Docs-as-Code tooling, diagramming, publishing.", depth: low, length: 900 }
+      - { title: "13.5 Simulation & Emulation", summary: "Explain simulators, SPICE, FEA, digital twins.", depth: low, length: 900 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 14 – Tailoring Cornerstone
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 14
+    title: "Tailoring Cornerstone – Adapting to Business Context and Scale"
+    intent: >
+      Explain how to tailor Cornerstone for organisation size, team maturity,
+      regulatory environment, complexity, and real-world constraints. Provide
+      a lightweight-to-heavyweight adaptation spectrum.
+    output: "chapter_14.md"
+    sections:
+      - { title: "14.1 The Importance of Tailoring", summary: "Explain why one size never fits all.", depth: low, length: 900 }
+      - { title: "14.2 Spectrum of Implementation", summary: "Describe lightweight, balanced, and heavy variants.", depth: medium, length: 1500 }
+      - { title: "14.3 Importance of Context", summary: "Explain product constraints, regulatory constraints, org structure.", depth: low, length: 900 }
+      - { title: "14.4 Conway's Law & Organisational Alignment", summary: "Explain structural alignment and practical realities.", depth: medium, length: 1500 }
+      - { title: "14.5 Organisational Maturity Model", summary: "Explain maturity levels and adoption paths.", depth: low, length: 900 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 15 – Adoption
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 15
+    title: "Adopting Cornerstone – Strategy, Pitfalls, and Phased Rollout"
+    intent: >
+      Provide a practical adoption pathway: assessment, pilot selection,
+      communication, rollout, and common failure patterns.
+    output: "chapter_15.md"
+    sections:
+      - { title: "15.1 Adopting Cornerstone – A Phased Approach", summary: "Explain assessment, pilot setup, incremental adoption.", depth: medium, length: 1500 }
+      - { title: "15.2 Common Pitfalls and How to Avoid Them", summary: "Explain misalignments, over-documentation, hardware blind spots, resistance.", depth: medium, length: 1500 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 16 – Measurement
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 16
+    title: "Measuring Outcomes and Estimation in Cornerstone"
+    intent: >
+      Shift focus from output metrics to outcome metrics, define practical
+      measurement models, and show estimation patterns suited to hybrid delivery.
+    output: "chapter_16.md"
+    sections:
+      - { title: "16.1 Measuring Success – Focusing on Outcomes and Value", summary: "Explain outcome-based metrics and caution against vanity metrics.", depth: medium, length: 1500 }
+      - { title: "16.2 Estimation Approaches for Hybrid Work", summary: "Explain estimation across disciplines, uncertainty modelling, buffers.", depth: medium, length: 1500 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 17 – Case Studies
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 17
+    title: "Case Studies – Real-World Applications of Cornerstone"
+    intent: >
+      Provide narrative case studies illustrating how Cornerstone works in
+      practice across multiple product types.
+    output: "chapter_17.md"
+    sections:
+      - { title: "17.1 Why Case Studies Matter", summary: "Explain purpose and framing.", depth: low, length: 600 }
+      - { title: "17.2 Case Studies", summary: "Provide 2–3 detailed case studies: IoT, defence, consumer electronics.", depth: high, length: 2500 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 18 – Scaling Cornerstone
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 18
+    title: "Scaling Cornerstone for Large-Scale Product Development"
+    intent: >
+      Provide a cohesive scaling philosophy for large programmes, focusing on
+      alignment, dependencies, documentation, and team-of-teams collaboration.
+    output: "chapter_18.md"
+    sections:
+      - { title: "18.1 The Need for a Holistic Scaling Philosophy", summary: "Explain why scaling is different to team-level agility.", depth: medium, length: 1300 }
+      - { title: "18.2 Planning, Alignment, and Work Breakdown at Scale", summary: "Explain strategic planning, WBS, programme-level backlogs.", depth: high, length: 2000 }
+      - { title: "18.3 Managing Dependencies and Maintaining Flow", summary: "Explain dependency mapping, ICDs, integration cadences.", depth: high, length: 1800 }
+      - { title: "18.4 Scaling Documentation and Artifacts", summary: "Explain standardising key artefacts while maintaining flow.", depth: medium, length: 1500 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 19 – Advanced Topics
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 19
+    title: "Advanced Topics and the Future of Cornerstone"
+    intent: >
+      Explore advanced applications of Cornerstone, covering regulated
+      environments, AI/ML, continuous development, emerging technologies,
+      and sustainability considerations.
+    output: "chapter_19.md"
+    sections:
+      - { title: "19.1 Cornerstone in Regulated & Safety-Critical Environments", summary: "Explain mapping to standards, formal V&V, evidence.", depth: high, length: 1800 }
+      - { title: "19.2 AI/ML in Product Development", summary: "Explain integration of AI/ML in a Cornerstone lifecycle.", depth: medium, length: 1200 }
+      - { title: "19.3 Continuous Improvement & Evolution", summary: "Explain long-term evolution of frameworks and products.", depth: low, length: 900 }
+      - { title: "19.4 Cornerstone for Continuous Product Development & Open-Ended Projects", summary: "Explain continuous roadmap, evolving architecture, incremental release.", depth: medium, length: 1500 }
+      - { title: "19.5 Emerging Technologies and Cornerstone’s Adaptability", summary: "Explain future-proofing and adaptability principles.", depth: low, length: 900 }
+      - { title: "19.6 Ethical and Environmental Sustainability", summary: "Explain broader sustainability and ethics.", depth: low, length: 900 }
+
+
+  #
+  # ───────────────────────────────────────────────────────────────
+  # Chapter 20 – Conclusion
+  # ───────────────────────────────────────────────────────────────
+  #
+  - number: 20
+    title: "Conclusion – The Path Forward"
+    intent: >
+      Summarise the philosophy, principles, lifecycle, cultural foundations,
+      and practical guidance. Provide encouragement for adopting and evolving
+      Cornerstone across different organisational contexts.
+    output: "chapter_20.md"
+    sections:
+      - { title: "20.1 Recap of Cornerstone’s Benefits", summary: "Summarise improved predictability, agility, quality, risk reduction.", depth: low, length: 900 }
+      - { title: "20.2 Your Journey to Cornerstone Mastery", summary: "Provide closing guidance, future direction, continuous learning.", depth: low, length: 900 }
